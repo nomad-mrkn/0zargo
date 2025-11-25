@@ -18,7 +18,7 @@ spec:
   sources:
     # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
-      targetRevision: main
+      targetRevision: HEAD
       path: shared/jit-rbac-roles
       kustomize:
         commonLabels:
@@ -44,7 +44,7 @@ spec:
     
     # Source 2: Job wave 99
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
-      targetRevision: main
+      targetRevision: HEAD
       path: shared/jit-rbac
       kustomize:
         commonLabels:
@@ -59,7 +59,7 @@ spec:
                 value: k8s-spb2-backend2-certmanager-mark-completed
     
     # Source 3: Helm chart
-    - repoURL: 'https://github.com/nomad-mrkn/charts.git'
+    - repoURL: 'https://charts.jetstack.io'
       targetRevision: HEAD
       chart: cert-manager
       helm:
