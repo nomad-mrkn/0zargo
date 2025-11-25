@@ -61,11 +61,11 @@ spec:
                 value: k8s-spb2-backend1-certmanager-mark-completed
     
     # Source 3: Helm chart
-    - repoURL: 'https://charts.jetstack.io'
+    - repoURL: 'https://github.com/nomad-mrkn/charts.git'
       targetRevision: HEAD
-      chart: cert-manager
+      path: cert-manager
       helm:
-        releaseName: k8s-spb2-backend1-certmanager
+        releaseName: k8s-spb2-backend2-certmanager
         values: |
           installCRDs: true
           startupapicheck:
