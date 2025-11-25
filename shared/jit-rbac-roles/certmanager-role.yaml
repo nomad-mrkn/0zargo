@@ -118,3 +118,22 @@ rules:
   - apiGroups: ["batch"]
     resources: ["jobs"]
     verbs: ["create", "delete", "list", "get", "watch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: PLACEHOLDER
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-options: Prune=false
+  labels:
+    app.kubernetes.io/part-of: argo-jit-rbac
+    jit-rbac/app: k8s-spb2-backend1-certmanager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: PLACEHOLDER
+subjects:
+  - kind: ServiceAccount
+    name: argocd-manager
+    namespace: kube-system
