@@ -5,7 +5,7 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: PreDelete
     argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
-    argocd.argoproj.io/hook-weight: "-1"
+    argocd.argoproj.io/hook-weight: "-10"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: PLACEHOLDER
@@ -117,7 +117,23 @@ spec:
             
             # Wait a bit more to ensure RBAC is propagated
             echo "Waiting for RBAC to propagate..."
-            sleep 3
+            sleep 10
+            
+            # Verify that we have delete permissions by trying to get clusterroles
+            echo "Verifying delete permissions..."
+            for i in {1..10}; do
+              if kubectl auth can-i delete clusterroles --as=system:serviceaccount:kube-system:argocd-manager 2>/dev/null | grep -q "yes"; then
+                echo "Delete permissions verified successfully (attempt $i)"
+                break
+              fi
+              if [ $i -eq 10 ]; then
+                echo "WARNING: Delete permissions verification failed after 10 attempts"
+                echo "This may cause issues during deletion, but continuing..."
+              else
+                echo "Waiting for permissions to propagate (attempt $i/10)..."
+                sleep 2
+              fi
+            done
             
             echo "========================================="
             echo "PreDelete deleter role setup completed for ${JIT_RBAC_APP}"
