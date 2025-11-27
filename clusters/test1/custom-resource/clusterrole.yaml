@@ -40,6 +40,7 @@ rules:
     - endpoints
     - serviceaccounts
     - services
+    - replicationcontrollers
     - backupstoragelocations
     - schedules
     - volumesnapshotlocations
@@ -70,7 +71,7 @@ rules:
     verbs: ["create", "delete", "list", "get", "watch", "update", "patch"]
   
   - apiGroups: [""]
-    resources: ["pods", "configmaps"]
+    resources: ["pods", "configmaps", "replicationcontrollers"]
     verbs: ["delete", "get", "list", "watch"]
   
   - apiGroups: ["apiextensions.k8s.io"]
