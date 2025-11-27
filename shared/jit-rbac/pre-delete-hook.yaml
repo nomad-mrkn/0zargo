@@ -63,7 +63,7 @@ spec:
               resources: ["customresourcedefinitions"]
               verbs: ["delete", "get", "list", "watch"]
             - apiGroups: [""]
-              resources: ["namespaces"]
+              resources: ["namespaces", "serviceaccounts", "configmaps", "secrets", "pods", "services"]
               verbs: ["delete", "get", "list", "watch"]
             EOF
             
@@ -123,4 +123,3 @@ spec:
             echo "PreDelete deleter role setup completed for ${JIT_RBAC_APP}"
             echo "Completed at $(date -u +%FT%TZ)"
             echo "========================================="
-
