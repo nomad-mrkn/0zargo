@@ -58,6 +58,7 @@ rules:
     - storageclasses
     - csistoragecapacities
     - volumeattributesclasses
+    - csinodes
     verbs: ["get", "list", "watch"]
   
   - apiGroups: [""]
