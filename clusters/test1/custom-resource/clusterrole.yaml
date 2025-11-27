@@ -41,6 +41,7 @@ rules:
     - serviceaccounts
     - services
     - replicationcontrollers
+    - nodes
     - backupstoragelocations
     - schedules
     - volumesnapshotlocations
