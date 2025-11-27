@@ -63,7 +63,7 @@ rules:
   
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles"]
-    verbs: ["bind", "get", "update", "patch", "create", "escalate", "list", "watch"]
+    verbs: ["bind", "get", "update", "patch", "create", "escalate", "list", "watch", "delete"]
   
   - apiGroups: ["batch"]
     resources: ["jobs", "cronjobs"]
@@ -80,7 +80,7 @@ rules:
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get"]
-  
+
   # Additional permissions for ServiceAccount to allow jit-rbac-marker creation
   - apiGroups: [""]
     resources: ["serviceaccounts"]
