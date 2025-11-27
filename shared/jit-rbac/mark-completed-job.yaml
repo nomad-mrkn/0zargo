@@ -104,7 +104,7 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: PreDelete
     argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
-    argocd.argoproj.io/hook-weight: "1"
+    argocd.argoproj.io/hook-weight: "2"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: PLACEHOLDER
