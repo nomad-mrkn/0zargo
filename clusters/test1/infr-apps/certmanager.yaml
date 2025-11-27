@@ -13,12 +13,19 @@ spec:
     - CreateNamespace=true
     - SkipDryRunOnMissingResource=true
     - RespectIgnoreDifferences=true
+  ignoreDifferences:
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: jit-rbac-marker
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+    name: jit-rbac-marker-*
   project: default
   destination:
     name: kind-test-1
     namespace: cert-manager
   sources:
-    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding for Sync and PreDelete)
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
       path: shared/jit-rbac-roles
@@ -26,6 +33,7 @@ spec:
         commonLabels:
           jit-rbac/app: k8s-spb2-backend1-certmanager
         patches:
+          # Patch for Sync hook ClusterRole
           - target:
               kind: ClusterRole
               name: PLACEHOLDER
@@ -33,6 +41,7 @@ spec:
               - op: replace
                 path: /metadata/name
                 value: argocd-manager-certmanager
+          # Patch for Sync hook ClusterRoleBinding
           - target:
               kind: ClusterRoleBinding
               name: PLACEHOLDER
@@ -43,8 +52,33 @@ spec:
               - op: replace
                 path: /roleRef/name
                 value: argocd-manager-certmanager
+          # Patch for PreDelete hook ClusterRole
+          - target:
+              kind: ClusterRole
+              name: PLACEHOLDER-pre-delete
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: argocd-manager-certmanager-pre-delete
+              - op: replace
+                path: /metadata/labels/jit-rbac~1app
+                value: k8s-spb2-backend1-certmanager
+          # Patch for PreDelete hook ClusterRoleBinding
+          - target:
+              kind: ClusterRoleBinding
+              name: PLACEHOLDER-pre-delete
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: argocd-manager-certmanager-pre-delete
+              - op: replace
+                path: /roleRef/name
+                value: argocd-manager-certmanager-pre-delete
+              - op: replace
+                path: /metadata/labels/jit-rbac~1app
+                value: k8s-spb2-backend1-certmanager
     
-    # Source 2: Job wave 99
+    # Source 2: Job wave 99 (Sync) and PreDelete Job
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
       path: shared/jit-rbac
@@ -52,6 +86,7 @@ spec:
         commonLabels:
           jit-rbac/app: k8s-spb2-backend1-certmanager
         patches:
+          # Patch for Sync Job
           - target:
               kind: Job
               name: PLACEHOLDER-mark-completed
@@ -59,6 +94,17 @@ spec:
               - op: replace
                 path: /metadata/name
                 value: k8s-spb2-backend1-certmanager-mark-completed
+          # Patch for PreDelete Job
+          - target:
+              kind: Job
+              name: PLACEHOLDER-pre-delete-mark-completed
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: k8s-spb2-backend1-certmanager-pre-delete-mark-completed
+              - op: replace
+                path: /metadata/labels/jit-rbac~1app
+                value: k8s-spb2-backend1-certmanager
     
     # Source 3: Helm chart
     - repoURL: 'https://github.com/nomad-mrkn/charts.git'

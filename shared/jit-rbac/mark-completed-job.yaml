@@ -96,3 +96,63 @@ spec:
             echo "Successfully marked ${JIT_RBAC_APP} as completed"
             echo "Completed at $(date -u +%FT%TZ)"
             echo "========================================="
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: PLACEHOLDER-pre-delete-mark-completed
+  annotations:
+    argocd.argoproj.io/hook: PreDelete
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
+    argocd.argoproj.io/hook-weight: "2"
+  labels:
+    app.kubernetes.io/part-of: argo-jit-rbac
+    jit-rbac/app: PLACEHOLDER
+    jit-rbac/hook: pre-delete
+spec:
+  ttlSecondsAfterFinished: 60
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/part-of: argo-jit-rbac
+        jit-rbac/app: PLACEHOLDER
+    spec:
+      serviceAccountName: jit-rbac-marker
+      restartPolicy: Never
+      containers:
+      - name: mark-pre-delete-completed
+        image: bitnami/kubectl:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: JIT_RBAC_APP
+          value: PLACEHOLDER
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            set -euo pipefail
+            echo "========================================="
+            echo "Marking pre-delete RBAC as completed for ${JIT_RBAC_APP}"
+            echo "Started at $(date -u +%FT%TZ)"
+            echo "========================================="
+            
+            if kubectl label clusterrole -l jit-rbac/app=${JIT_RBAC_APP},jit-rbac/hook=pre-delete \
+              jit-rbac/sync-status=completed --overwrite; then
+              echo "PreDelete ClusterRole labeled successfully"
+            else
+              echo "Failed to label PreDelete ClusterRole"
+              exit 1
+            fi
+            
+            if kubectl label clusterrolebinding -l jit-rbac/app=${JIT_RBAC_APP},jit-rbac/hook=pre-delete \
+              jit-rbac/sync-status=completed --overwrite; then
+              echo "PreDelete ClusterRoleBinding labeled successfully"
+            else
+              echo "Failed to label PreDelete ClusterRoleBinding"
+              exit 1
+            fi
+            
+            echo "========================================="
+            echo "Successfully marked pre-delete RBAC for ${JIT_RBAC_APP} as completed"
+            echo "Completed at $(date -u +%FT%TZ)"
+            echo "========================================="
