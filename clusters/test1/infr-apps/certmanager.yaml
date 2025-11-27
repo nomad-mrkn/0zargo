@@ -17,6 +17,9 @@ spec:
   - group: rbac.authorization.k8s.io
     kind: ClusterRole
     name: jit-rbac-marker
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+    name: jit-rbac-marker-*
   project: default
   destination:
     name: kind-test-1
