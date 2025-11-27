@@ -12,27 +12,22 @@ metadata:
     jit-rbac/app: PLACEHOLDER
     jit-rbac/hook: pre-delete
 rules:
-  # Wide delete permissions for all resources
   - apiGroups: ["*"]
     resources: ["*"]
     verbs: ["delete", "get", "list", "watch"]
   
-  # Additional permissions for finalizers and status
   - apiGroups: ["*"]
     resources: ["*/finalizers", "*/status"]
     verbs: ["update", "patch", "delete"]
   
-  # Explicit permissions for RBAC resources (required for deleting ClusterRoles/ClusterRoleBindings)
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles", "clusterrolebindings", "roles", "rolebindings"]
     verbs: ["delete", "get", "list", "watch", "update", "patch"]
   
-  # Permissions for CRDs
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
     verbs: ["delete", "get", "list", "watch"]
   
-  # Permissions for namespaces
   - apiGroups: [""]
     resources: ["namespaces"]
     verbs: ["delete", "get", "list", "watch"]
