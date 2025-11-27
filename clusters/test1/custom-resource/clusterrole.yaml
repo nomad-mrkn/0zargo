@@ -63,7 +63,7 @@ rules:
   
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles"]
-    verbs: ["bind", "get", "update", "patch", "create", "escalate", "list", "watch", "delete"]
+    verbs: ["bind", "get", "update", "patch", "create", "escalate", "list", "watch"]
   
   - apiGroups: ["batch"]
     resources: ["jobs", "cronjobs"]
