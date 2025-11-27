@@ -1,4 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - mark-completed-job.yaml
+  # Only include Jobs - jit-rbac-marker resources (ServiceAccount, ClusterRole, ClusterRoleBinding)
+  # are shared resources and should be managed separately, not deleted with Application
+  - jobs.yaml
+  # mark-completed-job.yaml contains jit-rbac-marker resources - exclude it from Application sync
+  # These resources should be deployed separately as shared infrastructure
