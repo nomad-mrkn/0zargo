@@ -136,6 +136,14 @@ spec:
             echo "Started at $(date -u +%FT%TZ)"
             echo "========================================="
             
+            if kubectl label clusterrole -l jit-rbac/app=${JIT_RBAC_APP},jit-rbac/hook=pre-delete \
+              jit-rbac/sync-status=completed --overwrite; then
+              echo "PreDelete ClusterRole labeled successfully"
+            else
+              echo "Failed to label PreDelete ClusterRole"
+              exit 1
+            fi
+            
             if kubectl label clusterrolebinding -l jit-rbac/app=${JIT_RBAC_APP},jit-rbac/hook=pre-delete \
               jit-rbac/sync-status=completed --overwrite; then
               echo "PreDelete ClusterRoleBinding labeled successfully"
