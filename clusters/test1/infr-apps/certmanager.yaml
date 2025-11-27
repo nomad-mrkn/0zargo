@@ -78,7 +78,7 @@ spec:
                 path: /metadata/labels/jit-rbac~1app
                 value: k8s-spb2-backend1-certmanager
     
-    # Source 2: Job wave 99 (Sync) and PreDelete Job
+    # Source 2: jit-rbac-marker resources (ServiceAccount, ClusterRole, ClusterRoleBinding) and Jobs
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
       path: shared/jit-rbac
@@ -86,6 +86,25 @@ spec:
         commonLabels:
           jit-rbac/app: k8s-spb2-backend1-certmanager
         patches:
+          # Patch for jit-rbac-marker ServiceAccount namespace
+          - target:
+              kind: ServiceAccount
+              name: jit-rbac-marker
+            patch: |-
+              - op: replace
+                path: /metadata/labels/jit-rbac~1app
+                value: k8s-spb2-backend1-certmanager
+          # Patch for jit-rbac-marker ClusterRoleBinding
+          - target:
+              kind: ClusterRoleBinding
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+              - op: replace
+                path: /metadata/labels/jit-rbac~1app
+                value: k8s-spb2-backend1-certmanager
           # Patch for Sync Job
           - target:
               kind: Job
