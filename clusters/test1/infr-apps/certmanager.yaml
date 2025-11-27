@@ -18,7 +18,7 @@ spec:
     name: kind-test-1
     namespace: cert-manager
   sources:
-    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding) для синхронизации
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
       path: shared/jit-rbac-roles
@@ -44,7 +44,39 @@ spec:
                 path: /roleRef/name
                 value: argocd-manager-certmanager
     
-    # Source 2: Job wave 99
+    # Source 2: PreDelete Hook (Deleter-Role для удаления)
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac-deleter
+      kustomize:
+        commonLabels:
+          jit-rbac/app: k8s-spb2-backend1-certmanager
+        patches:
+          - target:
+              kind: ClusterRole
+              name: PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: argocd-manager-certmanager-deleter
+              - op: replace
+                path: /metadata/labels/jit-rbac~1app
+                value: k8s-spb2-backend1-certmanager
+          - target:
+              kind: ClusterRoleBinding
+              name: PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: argocd-manager-certmanager-deleter
+              - op: replace
+                path: /roleRef/name
+                value: argocd-manager-certmanager-deleter
+              - op: replace
+                path: /metadata/labels/jit-rbac~1app
+                value: k8s-spb2-backend1-certmanager
+    
+    # Source 3: Job wave 99
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
       path: shared/jit-rbac
@@ -60,7 +92,7 @@ spec:
                 path: /metadata/name
                 value: k8s-spb2-backend1-certmanager-mark-completed
     
-    # Source 3: Helm chart
+    # Source 4: Helm chart
     - repoURL: 'https://github.com/nomad-mrkn/charts.git'
       targetRevision: HEAD
       path: cert-manager
