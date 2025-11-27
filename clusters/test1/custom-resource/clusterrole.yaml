@@ -43,6 +43,9 @@ rules:
     - services
     - replicationcontrollers
     - nodes
+    - limitranges
+    - resourcequotas
+    - podtemplates
     - backupstoragelocations
     - schedules
     - volumesnapshotlocations
