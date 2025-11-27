@@ -1,4 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  # jit-rbac-marker resources with Prune=false annotation - they won't be deleted when Application is deleted
+  - mark-completed-job.yaml
+  # Jobs for marking sync completion
   - jobs.yaml
