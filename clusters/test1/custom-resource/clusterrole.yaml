@@ -80,3 +80,8 @@ rules:
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get"]
+  
+  # Additional permissions for ServiceAccount to allow jit-rbac-marker creation
+  - apiGroups: [""]
+    resources: ["serviceaccounts"]
+    verbs: ["create", "update", "patch"]
