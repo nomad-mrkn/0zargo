@@ -44,7 +44,7 @@ spec:
                 path: /roleRef/name
                 value: argocd-manager-certmanager
     
-    # Source 2: Job wave 99 + PreDelete hook
+    # Source 2: Job wave 99
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
       path: shared/jit-rbac
@@ -59,19 +59,6 @@ spec:
               - op: replace
                 path: /metadata/name
                 value: k8s-spb2-backend1-certmanager-mark-completed
-          - target:
-              kind: Job
-              name: PLACEHOLDER-pre-delete-setup
-            patch: |-
-              - op: replace
-                path: /metadata/name
-                value: k8s-spb2-backend1-certmanager-pre-delete-setup
-              - op: replace
-                path: /spec/template/spec/containers/0/env/0/value
-                value: k8s-spb2-backend1-certmanager
-              - op: replace
-                path: /spec/template/spec/containers/0/env/1/value
-                value: argocd-manager-certmanager-pre-delete
     
     # Source 3: Helm chart
     - repoURL: 'https://github.com/nomad-mrkn/charts.git'
