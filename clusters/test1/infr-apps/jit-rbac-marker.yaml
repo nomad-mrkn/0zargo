@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jit-rbac-marker-shared
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  syncPolicy:
+    automated:
+      prune: false  # Never delete these shared resources
+    syncOptions:
+    - CreateNamespace=true
+    - FailOnSharedResource=false
+  project: default
+  destination:
+    name: kind-test-1
+    namespace: cert-manager
+  source:
+    repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+    targetRevision: HEAD
+    path: shared/jit-rbac-marker
+    kustomize:
+      commonLabels:
+        jit-rbac/app: shared
+        jit-rbac/type: marker
+
