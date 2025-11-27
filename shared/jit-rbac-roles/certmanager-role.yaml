@@ -262,6 +262,13 @@ rules:
   - apiGroups: ["batch"]
     resources: ["jobs"]
     verbs: ["create", "delete", "list", "get", "watch", "update"]
+  
+  # Permission to delete shared JIT RBAC marker ClusterRole (if needed)
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles"]
+    verbs: ["delete"]
+    resourceNames:
+      - jit-rbac-marker
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
