@@ -59,6 +59,7 @@ rules:
     - csistoragecapacities
     - volumeattributesclasses
     - csinodes
+    - volumeattachments
     verbs: ["get", "list", "watch"]
   
   - apiGroups: [""]
