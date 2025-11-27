@@ -13,6 +13,29 @@ spec:
     - CreateNamespace=true
     - SkipDryRunOnMissingResource=true
     - RespectIgnoreDifferences=true
+  ignoreDifferences:
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: jit-rbac-marker
+    jsonPointers:
+    - /metadata
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+    name: jit-rbac-marker-k8s-spb2-backend1-certmanager
+    jsonPointers:
+    - /metadata
+  - group: ""
+    kind: ServiceAccount
+    name: jit-rbac-marker
+    namespace: cert-manager
+    jsonPointers:
+    - /metadata
+  - group: batch
+    kind: Job
+    name: k8s-spb2-backend1-certmanager-mark-completed
+    namespace: cert-manager
+    jsonPointers:
+    - /metadata
   project: default
   destination:
     name: kind-test-1
