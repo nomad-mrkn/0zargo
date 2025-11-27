@@ -5,6 +5,7 @@ metadata:
   name: jit-rbac-marker
   annotations:
     argocd.argoproj.io/sync-wave: "98"
+    argocd.argoproj.io/sync-options: Prune=false
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: PLACEHOLDER
@@ -15,6 +16,7 @@ metadata:
   name: jit-rbac-marker
   annotations:
     argocd.argoproj.io/sync-wave: "98"
+    argocd.argoproj.io/sync-options: Prune=false
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
 rules:
@@ -28,6 +30,7 @@ metadata:
   name: jit-rbac-marker-PLACEHOLDER
   annotations:
     argocd.argoproj.io/sync-wave: "98"
+    argocd.argoproj.io/sync-options: Prune=false
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: PLACEHOLDER
