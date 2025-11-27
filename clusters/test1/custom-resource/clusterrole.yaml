@@ -28,6 +28,7 @@ rules:
     - servicemonitors
     - ingressclasses
     - networkpolicies
+    - servicecidrs
     - vmagents
     - vmnodescrapes
     - vmpodscrapes
@@ -53,6 +54,7 @@ rules:
     - persistentvolumes
     - storageclasses
     - csistoragecapacities
+    - volumeattributesclasses
     verbs: ["get", "list", "watch"]
   
   - apiGroups: [""]
