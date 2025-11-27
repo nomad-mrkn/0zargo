@@ -73,7 +73,7 @@ spec:
     # Source 2: Jobs only (jit-rbac-marker resources should be deployed separately as shared infrastructure)
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
-      path: shared/jit-rbac/jobs.yaml
+      path: shared/jit-rbac
       kustomize:
         commonLabels:
           jit-rbac/app: k8s-spb2-backend1-certmanager
