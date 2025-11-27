@@ -13,13 +13,6 @@ spec:
     - CreateNamespace=true
     - SkipDryRunOnMissingResource=true
     - RespectIgnoreDifferences=true
-  ignoreDifferences:
-  - group: rbac.authorization.k8s.io
-    kind: ClusterRole
-    name: jit-rbac-marker
-  - group: rbac.authorization.k8s.io
-    kind: ClusterRoleBinding
-    name: jit-rbac-marker-*
   project: default
   destination:
     name: kind-test-1
@@ -77,34 +70,14 @@ spec:
               - op: replace
                 path: /metadata/labels/jit-rbac~1app
                 value: k8s-spb2-backend1-certmanager
-    
-    # Source 2: jit-rbac-marker resources (ServiceAccount, ClusterRole, ClusterRoleBinding) and Jobs
+    # Source 2: Jobs only (jit-rbac-marker resources should be deployed separately as shared infrastructure)
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
-      path: shared/jit-rbac
+      path: shared/jit-rbac/jobs.yaml
       kustomize:
         commonLabels:
           jit-rbac/app: k8s-spb2-backend1-certmanager
         patches:
-          # Patch for jit-rbac-marker ServiceAccount namespace
-          - target:
-              kind: ServiceAccount
-              name: jit-rbac-marker
-            patch: |-
-              - op: replace
-                path: /metadata/labels/jit-rbac~1app
-                value: k8s-spb2-backend1-certmanager
-          # Patch for jit-rbac-marker ClusterRoleBinding
-          - target:
-              kind: ClusterRoleBinding
-              name: jit-rbac-marker-PLACEHOLDER
-            patch: |-
-              - op: replace
-                path: /metadata/name
-                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
-              - op: replace
-                path: /metadata/labels/jit-rbac~1app
-                value: k8s-spb2-backend1-certmanager
           # Patch for Sync Job
           - target:
               kind: Job
