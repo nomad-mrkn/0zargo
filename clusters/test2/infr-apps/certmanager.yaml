@@ -29,31 +29,12 @@ spec:
     name: kind-test-2
     namespace: cert-manager
   sources:
-    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding) — только роль cert-manager
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
       path: shared/jit-rbac-roles
-      kustomize:
-        commonLabels:
-          jit-rbac/app: k8s-spb2-backend2-certmanager
-        patches:
-          - target:
-              kind: ClusterRole
-              name: PLACEHOLDER
-            patch: |-
-              - op: replace
-                path: /metadata/name
-                value: argocd-manager-certmanager
-          - target:
-              kind: ClusterRoleBinding
-              name: PLACEHOLDER
-            patch: |-
-              - op: replace
-                path: /metadata/name
-                value: argocd-manager-certmanager
-              - op: replace
-                path: /roleRef/name
-                value: argocd-manager-certmanager
+      directory:
+        include: certmanager-role.yaml
     # Source 2: Job wave 99
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
@@ -78,7 +59,7 @@ spec:
                 value: k8s-spb2-backend2-certmanager-mark-completed
               - op: replace
                 path: /spec/template/spec/containers/0/env/0/value
-                value: k8s-spb2-backend2-certmanager
+                value: certmanager
     # Source 3: Helm chart
     - repoURL: 'https://github.com/nomad-mrkn/charts.git'
       targetRevision: HEAD
