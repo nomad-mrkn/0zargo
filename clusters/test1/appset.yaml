@@ -27,7 +27,7 @@ spec:
         directory:
           recurse: true
         path: clusters/test1/infr-apps
-        repoURL: 'https://github.com/nomad-mrkn/zargocd.git'
+        repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
         targetRevision: HEAD
       syncPolicy:
         automated:
