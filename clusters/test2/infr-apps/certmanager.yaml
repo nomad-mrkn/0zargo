@@ -29,7 +29,7 @@ spec:
     name: kind-test-2
     namespace: cert-manager
   sources:
-    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding) — только роль cert-manager
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
       path: shared/jit-rbac-roles
