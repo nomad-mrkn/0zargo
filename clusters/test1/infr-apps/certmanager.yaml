@@ -43,42 +43,27 @@ spec:
               - op: replace
                 path: /roleRef/name
                 value: argocd-manager-certmanager
-    
-    # Source 2: PreDelete Hook (creates deletion RBAC before app removal)
+    # Source 2: Job wave 99
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
-      path: shared/jit-rbac-predelete
+      path: shared/jit-rbac
       kustomize:
         commonLabels:
           jit-rbac/app: k8s-spb2-backend1-certmanager
         patches:
           - target:
               kind: Job
-              name: PLACEHOLDER-create-deletion-rbac
+              name: PLACEHOLDER-mark-completed
             patch: |-
               - op: replace
                 path: /metadata/name
-                value: k8s-spb2-backend1-certmanager-create-deletion-rbac
-              - op: replace
-                path: /spec/template/spec/containers/0/env/1/value
-                value: argocd-manager-certmanager-deletion
-              - op: replace
-                path: /spec/template/spec/containers/0/env/2/value
-                value: argocd-manager-certmanager-deletion
-          - target:
-              kind: ClusterRoleBinding
-              name: jit-rbac-predelete-PLACEHOLDER
-            patch: |-
-              - op: replace
-                path: /metadata/name
-                value: jit-rbac-predelete-k8s-spb2-backend1-certmanager
-    
+                value: k8s-spb2-backend1-certmanager-mark-completed
     # Source 3: Helm chart
     - repoURL: 'https://github.com/nomad-mrkn/charts.git'
       targetRevision: HEAD
-      path: cert-manager
+      chart: cert-manager
       helm:
-        releaseName: k8s-spb2-backend2-certmanager
+        releaseName: k8s-spb2-backend1-certmanager
         values: |
           installCRDs: true
           startupapicheck:
