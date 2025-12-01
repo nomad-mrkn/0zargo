@@ -32,7 +32,7 @@ spec:
     # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding) - only cert-manager role
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
-      path: shared/jit-rbac-roles/certmanager
+      path: shared/jit-rbac-roles/certmanager-role.yaml
       kustomize:
         commonLabels:
           jit-rbac/app: k8s-spb2-backend2-certmanager
