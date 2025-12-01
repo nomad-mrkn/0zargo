@@ -1,0 +1,70 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-spb2-backend1-certmanager
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+    - CreateNamespace=true
+    - SkipDryRunOnMissingResource=true
+    - RespectIgnoreDifferences=true
+  project: default
+  destination:
+    name: kind-test-1
+    namespace: cert-manager
+  sources:
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac-roles
+      kustomize:
+        commonLabels:
+          jit-rbac/app: k8s-spb2-backend1-certmanager
+        patches:
+          - target:
+              kind: ClusterRole
+              name: PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: argocd-manager-certmanager
+          - target:
+              kind: ClusterRoleBinding
+              name: PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: argocd-manager-certmanager
+              - op: replace
+                path: /roleRef/name
+                value: argocd-manager-certmanager
+    # Source 2: Job wave 99
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac
+      kustomize:
+        commonLabels:
+          jit-rbac/app: k8s-spb2-backend1-certmanager
+        patches:
+          - target:
+              kind: Job
+              name: PLACEHOLDER-mark-completed
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: k8s-spb2-backend1-certmanager-mark-completed
+    # Source 3: Helm chart
+    - repoURL: 'https://github.com/nomad-mrkn/charts.git'
+      targetRevision: HEAD
+      chart: cert-manager
+      helm:
+        releaseName: k8s-spb2-backend1-certmanager
+        values: |
+          installCRDs: true
+          startupapicheck:
+           enabled: false
