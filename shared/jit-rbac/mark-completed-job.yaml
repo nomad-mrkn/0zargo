@@ -46,7 +46,7 @@ metadata:
   name: PLACEHOLDER-mark-completed
   annotations:
     argocd.argoproj.io/hook: PostSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
+    # argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
     argocd.argoproj.io/sync-wave: "99"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
