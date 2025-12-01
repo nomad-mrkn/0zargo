@@ -29,10 +29,12 @@ spec:
     name: kind-test-2
     namespace: cert-manager
   sources:
-    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding) - only cert-manager role
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
-      path: shared/jit-rbac-roles/certmanager-role.yaml
+      path: shared/jit-rbac-roles
+      directory:
+        include: certmanager-role.yaml
       kustomize:
         commonLabels:
           jit-rbac/app: k8s-spb2-backend2-certmanager
