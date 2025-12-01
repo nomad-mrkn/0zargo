@@ -67,17 +67,30 @@ spec:
         image: bitnami/kubectl:latest
         imagePullPolicy: IfNotPresent
         env:
-        - name: JIT_RBAC_APP
+        - name: POD_NAME
           valueFrom:
             fieldRef:
-              fieldPath: metadata.labels['jit-rbac/app']
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
         command: ["/bin/sh", "-c"]
         args:
           - |
             set -euo pipefail
             echo "========================================="
-            echo "Marking sync as completed for ${JIT_RBAC_APP}"
+            echo "Reading jit-rbac/app label from pod ${POD_NAME}"
             echo "Started at $(date -u +%FT%TZ)"
+            echo "========================================="
+            
+            JIT_RBAC_APP=$(kubectl get pod "${POD_NAME}" -n "${POD_NAMESPACE}" -o jsonpath='{.metadata.labels.jit-rbac/app}' || echo "")
+            if [ -z "${JIT_RBAC_APP}" ]; then
+              echo "ERROR: Failed to read jit-rbac/app label from pod"
+              exit 1
+            fi
+            
+            echo "Found JIT_RBAC_APP: ${JIT_RBAC_APP}"
             echo "========================================="
             
             if kubectl label clusterrole -l jit-rbac/app=${JIT_RBAC_APP} \
