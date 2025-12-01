@@ -63,6 +63,13 @@ spec:
           jit-rbac/app: k8s-spb2-backend1-certmanager
         patches:
           - target:
+              kind: ClusterRoleBinding
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+          - target:
               kind: Job
               name: PLACEHOLDER-mark-completed
             patch: |-
