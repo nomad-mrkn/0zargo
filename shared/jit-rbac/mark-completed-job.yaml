@@ -68,7 +68,9 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: JIT_RBAC_APP
-          value: PLACEHOLDER
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['jit-rbac/app']
         command: ["/bin/sh", "-c"]
         args:
           - |
