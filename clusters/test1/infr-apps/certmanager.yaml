@@ -14,6 +14,17 @@ spec:
     - SkipDryRunOnMissingResource=true
     - RespectIgnoreDifferences=true
   project: default
+  ignoreDifferences:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: argocd-manager-certmanager
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: argocd-manager-certmanager
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
   destination:
     name: kind-test-1
     namespace: cert-manager
