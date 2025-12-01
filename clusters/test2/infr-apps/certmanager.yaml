@@ -41,7 +41,7 @@ spec:
       path: shared/jit-rbac
       kustomize:
         commonLabels:
-          jit-rbac/app: k8s-spb2-backend2-certmanager
+          jit-rbac/app: certmanager
         patches:
           - target:
               kind: ClusterRoleBinding
