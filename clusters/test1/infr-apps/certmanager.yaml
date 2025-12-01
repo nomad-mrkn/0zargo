@@ -61,7 +61,7 @@ spec:
     # Source 3: Helm chart
     - repoURL: 'https://github.com/nomad-mrkn/charts.git'
       targetRevision: HEAD
-      chart: cert-manager
+      path: cert-manager
       helm:
         releaseName: k8s-spb2-backend1-certmanager
         values: |
