@@ -25,6 +25,16 @@ spec:
       name: argocd-manager-certmanager
       jsonPointers:
         - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: jit-rbac-marker-k8s-spb2-backend1-certmanager
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: jit-rbac-marker-k8s-spb2-backend1-certmanager
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
     - kind: ServiceAccount
       name: jit-rbac-marker-k8s-spb2-backend1-certmanager
       jsonPointers:
@@ -55,11 +65,21 @@ spec:
                 path: /metadata/name
                 value: jit-rbac-marker-k8s-spb2-backend1-certmanager
           - target:
+              kind: ClusterRole
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+          - target:
               kind: ClusterRoleBinding
               name: jit-rbac-marker-PLACEHOLDER
             patch: |-
               - op: replace
                 path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+              - op: replace
+                path: /roleRef/name
                 value: jit-rbac-marker-k8s-spb2-backend1-certmanager
               - op: replace
                 path: /subjects/0/name

@@ -12,11 +12,12 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: jit-rbac-marker
+  name: jit-rbac-marker-PLACEHOLDER
   annotations:
     argocd.argoproj.io/sync-wave: "98"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
+    jit-rbac/app: PLACEHOLDER
 rules:
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles", "clusterrolebindings"]
@@ -37,7 +38,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: jit-rbac-marker
+  name: jit-rbac-marker-PLACEHOLDER
 subjects:
   - kind: ServiceAccount
     name: jit-rbac-marker-PLACEHOLDER
@@ -80,11 +81,19 @@ spec:
             echo "Started at $(date -u +%FT%TZ)"
             echo "========================================="
             
+            MARKER_CR_NAME="jit-rbac-marker-${JIT_RBAC_APP}"
+            if kubectl label clusterrole ${MARKER_CR_NAME} \
+              jit-rbac/sync-status=completed --overwrite 2>/dev/null; then
+              echo "Marker ClusterRole labeled successfully"
+            else
+              echo "Failed to label marker ClusterRole (may not exist yet)"
+            fi
+            
             if kubectl label clusterrole -l jit-rbac/app=${JIT_RBAC_APP} \
               jit-rbac/sync-status=completed --overwrite; then
-              echo "ClusterRole labeled successfully"
+              echo "Application ClusterRole labeled successfully"
             else
-              echo "Failed to label ClusterRole"
+              echo "Failed to label Application ClusterRole"
               exit 1
             fi
             
