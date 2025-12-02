@@ -30,11 +30,6 @@ spec:
       name: jit-rbac-marker-k8s-spb2-backend1-fluent-bit
       jsonPointers:
         - /metadata/labels/jit-rbac~1sync-status
-    - group: rbac.authorization.k8s.io
-      kind: ClusterRoleBinding
-      name: jit-rbac-marker-k8s-spb2-backend1-fluent-bit
-      jsonPointers:
-        - /metadata/labels/jit-rbac~1sync-status
     - kind: ServiceAccount
       name: jit-rbac-marker-k8s-spb2-backend1-fluent-bit
       jsonPointers:
