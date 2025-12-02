@@ -33,27 +33,8 @@ spec:
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
       path: shared/jit-rbac-roles
-      kustomize:
-        commonLabels:
-          jit-rbac/app: k8s-spb2-backend1-certmanager
-        patches:
-          - target:
-              kind: ClusterRole
-              name: PLACEHOLDER
-            patch: |-
-              - op: replace
-                path: /metadata/name
-                value: argocd-manager-certmanager
-          - target:
-              kind: ClusterRoleBinding
-              name: PLACEHOLDER
-            patch: |-
-              - op: replace
-                path: /metadata/name
-                value: argocd-manager-certmanager
-              - op: replace
-                path: /roleRef/name
-                value: argocd-manager-certmanager
+      directory:
+        include: certmanager-role.yaml
     # Source 2: Job wave 99
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
       targetRevision: HEAD
