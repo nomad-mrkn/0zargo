@@ -12,18 +12,16 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: jit-rbac-marker
+  name: jit-rbac-marker-PLACEHOLDER
   annotations:
     argocd.argoproj.io/sync-wave: "98"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
+    jit-rbac/app: PLACEHOLDER
 rules:
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles", "clusterrolebindings"]
     verbs: ["get", "list", "patch", "bind", "escalate"]
-  - apiGroups: [""]
-    resources: ["serviceaccounts"]
-    verbs: ["get", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -37,7 +35,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: jit-rbac-marker
+  name: jit-rbac-marker-PLACEHOLDER
 subjects:
   - kind: ServiceAccount
     name: jit-rbac-marker-PLACEHOLDER
@@ -96,17 +94,12 @@ spec:
               exit 1
             fi
             
-            SA_NAME="jit-rbac-marker-${JIT_RBAC_APP}"
-            SA_NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace 2>/dev/null || echo "")
-            if [ -n "${SA_NAMESPACE}" ] && [ -n "${SA_NAME}" ]; then
-              if kubectl label serviceaccount -n ${SA_NAMESPACE} ${SA_NAME} \
-                jit-rbac/sync-status=completed --overwrite 2>/dev/null; then
-                echo "ServiceAccount labeled successfully"
-              else
-                echo "Failed to label ServiceAccount (may not exist yet or no permissions)"
-              fi
+            MARKER_ROLE_NAME="jit-rbac-marker-${JIT_RBAC_APP}"
+            if kubectl label clusterrole ${MARKER_ROLE_NAME} \
+              jit-rbac/sync-status=completed --overwrite 2>/dev/null; then
+              echo "JIT RBAC ClusterRole ${MARKER_ROLE_NAME} labeled successfully"
             else
-              echo "Could not determine namespace or SA name, skipping ServiceAccount label"
+              echo "Failed to label JIT RBAC ClusterRole ${MARKER_ROLE_NAME} (may not exist yet)"
             fi
             
             echo "========================================="
