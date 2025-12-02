@@ -8,7 +8,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
-    jit-rbac/app: fluent-bit
+    jit-rbac/app: k8s-spb2-backend1-fluent-bit
 rules:
   - apiGroups: ["apps"]
     resources:
@@ -80,7 +80,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
-    jit-rbac/app: fluent-bit
+    jit-rbac/app: k8s-spb2-backend1-fluent-bit
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
