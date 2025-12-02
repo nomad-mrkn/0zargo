@@ -1,0 +1,73 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-spb2-backend2-fluent-bit
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+    - CreateNamespace=true
+    - SkipDryRunOnMissingResource=true
+    - RespectIgnoreDifferences=true
+  project: default
+  ignoreDifferences:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: argocd-manager-fluent-bit
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: argocd-manager-fluent-bit
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+  destination:
+    name: kind-test-2
+    namespace: fluent-bit
+  sources:
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac-roles
+      directory:
+        include: fluent-bit-role.yaml
+    # Source 2: Job wave 99
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac
+      kustomize:
+        commonLabels:
+          jit-rbac/app: fluent-bit
+        patches:
+          - target:
+              kind: ClusterRoleBinding
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend2-fluent-bit
+              - op: replace
+                path: /subjects/0/namespace
+                value: fluent-bit
+          - target:
+              kind: Job
+              name: PLACEHOLDER-mark-completed
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: k8s-spb2-backend2-fluent-bit-mark-completed
+              - op: replace
+                path: /spec/template/spec/containers/0/env/0/value
+                value: fluent-bit
+    - repoURL: 'https://github.com/nomad-mrkn/charts.git'
+      targetRevision: HEAD
+      path: fluent-bit
+      helm:
+        releaseName: k8s-spb2-backend2-fluent-bit
+        values: |
+          kind: DaemonSet
+          
