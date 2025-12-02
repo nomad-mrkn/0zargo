@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: jit-rbac-marker
+  name: jit-rbac-marker-PLACEHOLDER
   annotations:
     argocd.argoproj.io/sync-wave: "98"
   labels:
@@ -37,7 +37,7 @@ roleRef:
   name: jit-rbac-marker
 subjects:
   - kind: ServiceAccount
-    name: jit-rbac-marker
+    name: jit-rbac-marker-PLACEHOLDER
     namespace: PLACEHOLDER_NAMESPACE
 ---
 apiVersion: batch/v1
@@ -59,7 +59,7 @@ spec:
         app.kubernetes.io/part-of: argo-jit-rbac
         jit-rbac/app: PLACEHOLDER
     spec:
-      serviceAccountName: jit-rbac-marker
+      serviceAccountName: jit-rbac-marker-PLACEHOLDER
       restartPolicy: Never
       containers:
       - name: mark-completed
@@ -91,6 +91,18 @@ spec:
             else
               echo "Failed to label ClusterRoleBinding"
               exit 1
+            fi
+            
+            SA_NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace 2>/dev/null || echo "")
+            if [ -n "${SA_NAMESPACE}" ]; then
+              if kubectl label serviceaccount -n ${SA_NAMESPACE} -l jit-rbac/app=${JIT_RBAC_APP} \
+                jit-rbac/sync-status=completed --overwrite; then
+                echo "ServiceAccount labeled successfully"
+              else
+                echo "Failed to label ServiceAccount (may not exist yet)"
+              fi
+            else
+              echo "Could not determine namespace, skipping ServiceAccount label"
             fi
             
             echo "========================================="

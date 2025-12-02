@@ -25,6 +25,10 @@ spec:
       name: argocd-manager-certmanager
       jsonPointers:
         - /metadata/labels/jit-rbac~1sync-status
+    - kind: ServiceAccount
+      name: jit-rbac-marker-k8s-spb2-backend1-certmanager
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
   destination:
     name: kind-test-1
     namespace: cert-manager
@@ -44,11 +48,21 @@ spec:
           jit-rbac/app: k8s-spb2-backend1-certmanager
         patches:
           - target:
+              kind: ServiceAccount
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+          - target:
               kind: ClusterRoleBinding
               name: jit-rbac-marker-PLACEHOLDER
             patch: |-
               - op: replace
                 path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+              - op: replace
+                path: /subjects/0/name
                 value: jit-rbac-marker-k8s-spb2-backend1-certmanager
               - op: replace
                 path: /subjects/0/namespace
@@ -60,6 +74,9 @@ spec:
               - op: replace
                 path: /metadata/name
                 value: k8s-spb2-backend1-certmanager-mark-completed
+              - op: replace
+                path: /spec/template/spec/serviceAccountName
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
               - op: replace
                 path: /spec/template/spec/containers/0/env/0/value
                 value: k8s-spb2-backend1-certmanager
