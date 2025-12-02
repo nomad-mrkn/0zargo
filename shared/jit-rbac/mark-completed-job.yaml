@@ -38,7 +38,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: jit-rbac-marker
-    namespace: cert-manager
+    namespace: PLACEHOLDER_NAMESPACE
 ---
 apiVersion: batch/v1
 kind: Job

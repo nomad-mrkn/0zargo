@@ -69,6 +69,9 @@ spec:
               - op: replace
                 path: /metadata/name
                 value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+              - op: replace
+                path: /subjects/0/namespace
+                value: cert-manager
           - target:
               kind: Job
               name: PLACEHOLDER-mark-completed
