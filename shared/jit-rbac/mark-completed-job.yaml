@@ -4,6 +4,7 @@ kind: ServiceAccount
 metadata:
   name: jit-rbac-marker-PLACEHOLDER
   annotations:
+    argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/sync-wave: "98"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
@@ -14,6 +15,7 @@ kind: ClusterRole
 metadata:
   name: jit-rbac-marker-PLACEHOLDER
   annotations:
+    argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/sync-wave: "98"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
@@ -28,6 +30,7 @@ kind: ClusterRoleBinding
 metadata:
   name: jit-rbac-marker-PLACEHOLDER
   annotations:
+    argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/sync-wave: "98"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
