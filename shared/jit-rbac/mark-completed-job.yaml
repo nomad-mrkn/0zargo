@@ -84,7 +84,7 @@ spec:
           - |
             set -euo pipefail
             echo "========================================="
-            echo "Marking sync as completed for ${JIT_RBAC_APP} and ${POD_NAMESPACE}"
+            echo "Marking sync as completed for ${JIT_RBAC_APP}"
             echo "Started at $(date -u +%FT%TZ)"
             echo "========================================="
             
@@ -114,6 +114,5 @@ spec:
             
             echo "========================================="
             echo "Successfully marked ${JIT_RBAC_APP} as completed"
-            echo "Successfully marked ${POD_NAMESPACE} as completed"
             echo "Completed at $(date -u +%FT%TZ)"
             echo "========================================="
