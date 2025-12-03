@@ -24,6 +24,9 @@ rules:
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles", "clusterrolebindings"]
     verbs: ["get", "list", "patch", "bind", "escalate"]
+  - apiGroups: [""]
+    resources: ["serviceaccounts"]
+    verbs: ["get", "list", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -72,6 +75,10 @@ spec:
         env:
         - name: JIT_RBAC_APP
           value: PLACEHOLDER
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
         command: ["/bin/sh", "-c"]
         args:
           - |
@@ -94,6 +101,14 @@ spec:
               echo "ClusterRoleBinding labeled successfully"
             else
               echo "Failed to label ClusterRoleBinding"
+              exit 1
+            fi
+            
+            if kubectl label serviceaccount -n "${POD_NAMESPACE}" -l jit-rbac/app=${JIT_RBAC_APP} \
+              jit-rbac/sync-status=completed --overwrite; then
+              echo "ServiceAccount labeled successfully"
+            else
+              echo "Failed to label ServiceAccount"
               exit 1
             fi
             
