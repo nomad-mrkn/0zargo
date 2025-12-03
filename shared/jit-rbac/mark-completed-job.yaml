@@ -100,6 +100,16 @@ spec:
               echo "JIT RBAC ClusterRole ${MARKER_ROLE_NAME} labeled successfully"
             else
               echo "Failed to label JIT RBAC ClusterRole ${MARKER_ROLE_NAME} (may not exist yet)"
+              exit 1
+            fi
+            
+            MARKER_BINDING_NAME="jit-rbac-marker-${JIT_RBAC_APP}"
+            if kubectl label clusterrolebinding ${MARKER_BINDING_NAME} \
+              jit-rbac/sync-status=completed --overwrite 2>/dev/null; then
+              echo "JIT RBAC ClusterRoleBinding ${MARKER_BINDING_NAME} labeled successfully"
+            else
+              echo "Failed to label JIT RBAC ClusterRoleBinding ${MARKER_BINDING_NAME} (may not exist yet)"
+              exit 1
             fi
             
             echo "========================================="
