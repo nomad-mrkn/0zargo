@@ -37,7 +37,7 @@ spec:
         - /metadata/labels/jit-rbac~1sync-status
   destination:
     name: kind-test-1
-    namespace: kube-system
+    namespace: cert-manager
   sources:
     # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
@@ -82,7 +82,7 @@ spec:
                 value: jit-rbac-marker-k8s-spb2-backend1-certmanager
               - op: replace
                 path: /subjects/0/namespace
-                value: kube-system
+                value: cert-manager
           - target:
               kind: Job
               name: PLACEHOLDER-mark-completed

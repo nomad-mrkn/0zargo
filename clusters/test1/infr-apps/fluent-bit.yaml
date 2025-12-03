@@ -37,7 +37,7 @@ spec:
         - /metadata/labels/jit-rbac~1sync-status
   destination:
     name: kind-test-1
-    namespace: kube-system
+    namespace: fluent-bit
   sources:
     # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
     - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
@@ -82,7 +82,7 @@ spec:
                 value: jit-rbac-marker-k8s-spb2-backend1-fluent-bit
               - op: replace
                 path: /subjects/0/namespace
-                value: kube-system
+                value: fluent-bit
           - target:
               kind: Job
               name: PLACEHOLDER-mark-completed
