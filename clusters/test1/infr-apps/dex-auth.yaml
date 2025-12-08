@@ -128,7 +128,8 @@ spec:
               value: "dummy-secret-value"
           healthCheckPath: /
           readinessProbe:
-            initialDelaySeconds: 60
+            tcpSocket: {}
+            initialDelaySeconds: 30
             periodSeconds: 10
-            timeoutSeconds: 5
+            timeoutSeconds: 3
             failureThreshold: 5
