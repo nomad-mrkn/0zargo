@@ -122,10 +122,12 @@ spec:
                 excludedNamespaces:
                 - kube-system
                 - kyverno
-                excludedResources:
-                - horizontalpodautoscalers.autoscaling
-                - secrets
-          vault:
-            - name: velero-cloud-secret
-              path: secret/internal/devops/velero/ru_spb-prod
-              type: Opaque
+          excludedResources:
+          - horizontalpodautoscalers.autoscaling
+          - secrets
+          # vault:
+          #   - name: velero-cloud-secret
+          #     path: secret/internal/devops/velero/ru_spb-prod
+          #     type: Opaque
+          credentials:
+            useSecret: false
