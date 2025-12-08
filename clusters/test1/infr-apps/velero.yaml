@@ -131,7 +131,7 @@ spec:
           #     type: Opaque
           credentials:
             useSecret: true
-            # existingSecret: velero-cloud-secret
+            existingSecret: ""
             secretContents:
               cloud: |
                 [default]

@@ -100,17 +100,17 @@ spec:
     - repoURL: 'https://github.com/nomad-mrkn/charts.git'
       targetRevision: HEAD
       path: vector
-      helm:
+    helm:
         releaseName: k8s-spb2-backend1-vector
         values: |
-          okkoDatacenter: "ru_spb2"
-          okkoK8sClusterName: "k8s-spb2-backend1"
-          okkoEnv: "production"
-          okkoKafkaLogs: "kafka-logs1.spb2.dc:9092,kafka-logs2.spb2.dc:9092,kafka-logs3.spb2.dc:9092,kafka-logs4.spb2.dc:9092,kafka-logs5.spb2.dc:9092"
-          resources:
-            requests:
+        okkoDatacenter: "ru_spb2"
+        okkoK8sClusterName: "k8s-spb2-backend1"
+        okkoEnv: "production"
+        okkoKafkaLogs: "kafka-logs1.spb2.dc:9092,kafka-logs2.spb2.dc:9092,kafka-logs3.spb2.dc:9092,kafka-logs4.spb2.dc:9092,kafka-logs5.spb2.dc:9092"
+        resources:
+          requests:
               cpu: 100m
               memory: 256Mi
-            limits:
+          limits:
               cpu: 2
               memory: 2Gi
