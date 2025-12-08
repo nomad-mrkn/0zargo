@@ -119,3 +119,30 @@ spec:
                   - matchExpressions:
                       - key: node-role.kubernetes.io/infr
                         operator: Exists
+          DNSConfig:
+            Corefile: |
+              .:53 {
+                  errors
+                  health {
+                      lameduck 5s
+                  }
+                  ready
+                  log . {
+                      class error
+                  }
+                  prometheus :9153
+                  # Hosts plugin для статических записей (заглушки)
+                  hosts {
+                      127.0.0.1 elasticsearch-master
+                      fallthrough
+                  }
+                  kubernetes cluster.local in-addr.arpa ip6.arpa {
+                      pods insecure
+                      fallthrough in-addr.arpa ip6.arpa
+                  }
+                  forward . /etc/resolv.conf
+                  cache 30
+                  loop
+                  reload
+                  loadbalance
+              }
