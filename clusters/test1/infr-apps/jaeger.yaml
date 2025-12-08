@@ -106,52 +106,52 @@ spec:
           jaeger:
             create: true
             spec:
-            strategy: production
-            ingress:
-              enabled: false
-            agent:
-              resources:
-                limits:
-                  cpu: 2000m
-                  memory: 1024Mi
-                requests:
-                  cpu: 200m
-                  memory: 128Mi
-              sidecarSecurityContext:
-                allowPrivilegeEscalation: false
-                capabilities:
-                  drop:
-                    - ALL
-                runAsNonRoot: true
-                runAsUser: 1001
-                runAsGroup: 1001
-                seccompProfile:
-                  type: RuntimeDefault
-              image: ghcr.io/jaegertracing/jaeger-agent:1.49.0
-            query:
-              resources:
-                requests:
-                  cpu: 100m
-                  memory: 128Mi
-                limits:
-                  cpu: 2000m
-                  memory: 512Mi
-              image: ghcr.io/jaegertracing/jaeger-query:1.49.0
-              tolerations:
-                - key: "node-role.kubernetes.io/infr"
-                  operator: "Exists"
-                  effect: "NoSchedule"
-              affinity:
-                nodeAffinity:
-                  preferredDuringSchedulingIgnoredDuringExecution:
-                    - weight: 1
-                      preference:
-                        matchExpressions:
-                          - key: "node-role.kubernetes.io/infr"
-                            operator: "Exists"
-            collector:
+              strategy: production
+              ingress:
+                enabled: false
+              agent:
+                resources:
+                  limits:
+                    cpu: 2000m
+                    memory: 1024Mi
+                  requests:
+                    cpu: 200m
+                    memory: 128Mi
+                sidecarSecurityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                      - ALL
+                  runAsNonRoot: true
+                  runAsUser: 1001
+                  runAsGroup: 1001
+                  seccompProfile:
+                    type: RuntimeDefault
+                image: ghcr.io/jaegertracing/jaeger-agent:1.49.0
+              query:
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 128Mi
+                  limits:
+                    cpu: 2000m
+                    memory: 512Mi
+                image: ghcr.io/jaegertracing/jaeger-query:1.49.0
+                tolerations:
+                  - key: "node-role.kubernetes.io/infr"
+                    operator: "Exists"
+                    effect: "NoSchedule"
+                affinity:
+                  nodeAffinity:
+                    preferredDuringSchedulingIgnoredDuringExecution:
+                      - weight: 1
+                        preference:
+                          matchExpressions:
+                            - key: "node-role.kubernetes.io/infr"
+                              operator: "Exists"
+              collector:
                 replicas: 24
-              image: ghcr.io/jaegertracing/jaeger-collector:1.49.0
+                image: ghcr.io/jaegertracing/jaeger-collector:1.49.0
               options:
                 collector:
                   num-workers: 2000
