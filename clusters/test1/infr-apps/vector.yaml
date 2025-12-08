@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-spb2-backend1-vector
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - FailOnSharedResource=false
+  project: k8s-spb2-backend1
+  destination:
+    name: k8s-spb2-backend1
+    namespace: kube-system
+  source:
+    repoURL: "https://artifactory.playteam.ru:443/artifactory/helm/"
+    targetRevision: 0.42.1-113R
+    chart: vector
+    helm:
+      releaseName: vector
+      valuesObject:
+        okkoDatacenter: "ru_spb2"
+        okkoK8sClusterName: "k8s-spb2-backend1"
+        okkoEnv: "production"
+        okkoKafkaLogs: "kafka-logs1.spb2.dc:9092,kafka-logs2.spb2.dc:9092,kafka-logs3.spb2.dc:9092,kafka-logs4.spb2.dc:9092,kafka-logs5.spb2.dc:9092"
+        resources:
+          requests:
+            cpu: 4
+            memory: 4Gi
+          limits:
+            cpu: 12
+            memory: 16Gi

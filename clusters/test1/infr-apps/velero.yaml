@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-spb2-backend1-velero
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+    - FailOnSharedResource=false
+  project: k8s-spb2-backend1
+  destination:
+    name: k8s-spb2-backend1
+    namespace: kube-system
+  source:
+      repoURL: 'https://artifactory.playteam.ru:443/artifactory/helm/'
+      targetRevision: 2.31.8-38R
+      chart: velero
+      helm:
+        releaseName: velero
+        valuesObject:
+          configuration:
+            backupStorageLocation:
+              prefix: ru/SPB/ru_SPB/prod
+          schedules:
+            k8s-spb2-backend1:
+              disabled: false
+              labels:
+                myenv: dailybackup
+              annotations:
+                myenv: dailybackup
+              schedule: "0 3 * * *"
+              useOwnerReferencesInBackup: false
+              template:
+                ttl: "792h"
+                excludedNamespaces:
+                - kube-system
+                - kyverno
+                excludedResources:
+                - horizontalpodautoscalers.autoscaling
+                - secrets
+          vault:
+            - name: velero-cloud-secret
+              path: secret/internal/devops/velero/ru_spb-prod
+              type: Opaque

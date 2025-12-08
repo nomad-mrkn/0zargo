@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-spb2-backend1-x509
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  syncPolicy:
+    syncOptions:
+    - FailOnSharedResource=true
+    automated:
+      prune: true
+      selfHeal: false
+  project: k8s-spb2-backend1
+  destination:
+    name: k8s-spb2-backend1
+    namespace: kube-system
+  source:
+    repoURL: 'https://artifactory.playteam.ru:443/artifactory/helm/'
+    targetRevision: 3.6.0-okko-v2
+    chart: x509-certificate-exporter
+    helm:
+      releaseName: x509-certificate-exporter
+      valuesObject:
+        #values.yaml
+        image:
+          registry: registry.playteam.ru
+          repository: x509/x509-certificate-exporter
+          tag: 3.6.0-722
+        prometheusRules:
+          create: false
+        secretsExporter:
+          resources:
+            limits:
+              cpu: 500m
+              memory: 150Mi
+            requests:
+              cpu: 500m
+              memory: 150Mi
+          tolerations:
+            - key: "node-role.kubernetes.io/infr"
+              operator: "Exists"
+              effect: "NoSchedule"
+          affinity:
+            nodeAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 1
+                  preference:
+                    matchExpressions:
+                    - key: "node-role.kubernetes.io/infr"
+                      operator: "Exists"
