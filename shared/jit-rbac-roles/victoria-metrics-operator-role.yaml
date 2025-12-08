@@ -3,8 +3,9 @@ kind: ClusterRole
 metadata:
   name: argocd-manager-victoria-metrics-operator
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
-    argocd.argoproj.io/sync-options: Prune=false
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+    argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: k8s-spb2-backend1-victoria-metrics-operator
@@ -87,10 +88,6 @@ rules:
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
   - apiGroups: [""]
-    resources: ["configmaps/status"]
-    verbs: ["get", "update", "patch"]
-  
-  - apiGroups: [""]
     resources: ["namespaces"]
     verbs: ["create", "get", "list", "watch"]
   
@@ -100,7 +97,7 @@ rules:
       - rolebindings
       - clusterroles
       - clusterrolebindings
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete", "bind", "escalate"]
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
   - apiGroups: ["monitoring.coreos.com"]
     resources:
@@ -132,3 +129,23 @@ rules:
   - apiGroups: ["batch"]
     resources: ["jobs"]
     verbs: ["create", "delete", "list", "get", "watch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: argocd-manager-victoria-metrics-operator
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+    argocd.argoproj.io/sync-wave: "-1"
+  labels:
+    app.kubernetes.io/part-of: argo-jit-rbac
+    jit-rbac/app: k8s-spb2-backend1-victoria-metrics-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argocd-manager-victoria-metrics-operator
+subjects:
+  - kind: ServiceAccount
+    name: argocd-manager
+    namespace: kube-system
