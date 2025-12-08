@@ -100,7 +100,7 @@ spec:
     - repoURL: 'https://github.com/nomad-mrkn/charts.git'
       targetRevision: HEAD
       path: vector
-    helm:
+      helm:
         releaseName: k8s-spb2-backend1-vector
         values: |
         okkoDatacenter: "ru_spb2"
