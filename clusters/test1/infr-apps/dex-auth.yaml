@@ -126,4 +126,4 @@ spec:
           podEnv:
             - name: KEYCLOACK-SECRET
               value: "dummy-secret-value"
-          healthCheckPath: /
+          healthCheckPath: /healthz
