@@ -1,0 +1,121 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-spb2-backend1-coredns
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+    - CreateNamespace=true
+    - SkipDryRunOnMissingResource=true
+    - RespectIgnoreDifferences=true
+  project: default
+  ignoreDifferences:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: argocd-manager-coredns
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: argocd-manager-coredns
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: jit-rbac-marker-k8s-spb2-backend1-coredns
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: jit-rbac-marker-k8s-spb2-backend1-coredns
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+  destination:
+    namespace: coredns
+    name: kind-test-1
+  sources:
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac-roles
+      directory:
+        include: coredns-role.yaml
+    # Source 2: Job wave 99
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac
+      kustomize:
+        commonLabels:
+          jit-rbac/app: k8s-spb2-backend1-coredns
+        patches:
+          - target:
+              kind: ServiceAccount
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-coredns
+          - target:
+              kind: ClusterRole
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-coredns
+          - target:
+              kind: ClusterRoleBinding
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-coredns
+              - op: replace
+                path: /roleRef/name
+                value: jit-rbac-marker-k8s-spb2-backend1-coredns
+              - op: replace
+                path: /subjects/0/name
+                value: jit-rbac-marker-k8s-spb2-backend1-coredns
+              - op: replace
+                path: /subjects/0/namespace
+                value: coredns
+          - target:
+              kind: Job
+              name: PLACEHOLDER-mark-completed
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: k8s-spb2-backend1-coredns-mark-completed
+              - op: replace
+                path: /spec/template/spec/serviceAccountName
+                value: jit-rbac-marker-k8s-spb2-backend1-coredns
+              - op: replace
+                path: /spec/template/spec/containers/0/env/0/value
+                value: k8s-spb2-backend1-coredns
+    # Source 3: Helm chart
+    - repoURL: 'https://github.com/nomad-mrkn/charts.git'
+      targetRevision: HEAD
+      path: coredns
+      helm:
+        releaseName: coredns
+        values: |
+          image:
+            repository: registry.k8s.io/coredns/coredns
+            tag: 1.12.1
+            pullPolicy: IfNotPresent
+          replicas: 8
+          tolerations:
+            - key: node-role.kubernetes.io/infr
+              operator: Exists
+              effect: NoSchedule
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: node-role.kubernetes.io/infr
+                        operator: Exists
