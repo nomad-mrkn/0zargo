@@ -131,7 +131,7 @@ spec:
           #     type: Opaque
           credentials:
             useSecret: true
-            existingSecret: ""
+            existingSecret: null
             secretContents:
               cloud: |
                 [default]
