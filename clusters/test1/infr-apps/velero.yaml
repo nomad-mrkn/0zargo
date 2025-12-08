@@ -131,7 +131,7 @@ spec:
           #     type: Opaque
           credentials:
             useSecret: true
-            # existingSecret не указываем, чтобы chart создал секрет автоматически
+            existingSecret: ~  # Явно устанавливаем null, чтобы переопределить дефолт из values.yaml
             secretContents:
               cloud: |
                 [default]
