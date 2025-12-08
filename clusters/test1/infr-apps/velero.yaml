@@ -130,4 +130,10 @@ spec:
           #     path: secret/internal/devops/velero/ru_spb-prod
           #     type: Opaque
           credentials:
-            useSecret: false
+            useSecret: true
+            # existingSecret: velero-cloud-secret
+            secretContents:
+              cloud: |
+                [default]
+                aws_access_key_id=dummy
+                aws_secret_access_key=dummy
