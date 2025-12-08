@@ -118,6 +118,8 @@ spec:
             shardCount: 1
           metrics-server:
             enabled: true
+            rbac:
+              create: false
             args:
               - --kubelet-insecure-tls
           prometheus-node-exporter:
