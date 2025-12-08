@@ -103,6 +103,8 @@ spec:
       helm:
         releaseName: k8s-spb2-backend1-velero
         values: |
+          rbac:
+            create: true
           configuration:
             backupStorageLocation:
               prefix: ru/SPB/ru_SPB/prod

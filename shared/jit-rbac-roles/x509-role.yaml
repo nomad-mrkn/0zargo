@@ -28,12 +28,15 @@ rules:
       - pods/log
       - events
       - endpoints
-      - namespaces
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
   - apiGroups: [""]
     resources: ["namespaces"]
     verbs: ["create", "get", "list", "watch"]
+
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch"]
 
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources:
