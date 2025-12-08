@@ -107,16 +107,14 @@ spec:
             repository: registry.k8s.io/coredns/coredns
             tag: 1.12.1
             pullPolicy: IfNotPresent
-          replicas: 8
-          tolerations:
-            - key: node-role.kubernetes.io/infr
-              operator: Exists
-              effect: NoSchedule
+          replicas: 2
+          tolerations: []
           affinity:
             nodeAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-                nodeSelectorTerms:
-                  - matchExpressions:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 100
+                  preference:
+                    matchExpressions:
                       - key: node-role.kubernetes.io/infr
                         operator: Exists
           DNSConfig:
