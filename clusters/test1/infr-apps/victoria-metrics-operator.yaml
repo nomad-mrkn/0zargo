@@ -109,6 +109,8 @@ spec:
           env:
             - name: VM_VMAGENTDEFAULT_CONFIGRELOADIMAGE
               value: quay.io/prometheus-operator/prometheus-config-reloader:v0.68.0
+          rbac:
+            create: true
           vmagent:
             enabled: true
             remoteWrite:
