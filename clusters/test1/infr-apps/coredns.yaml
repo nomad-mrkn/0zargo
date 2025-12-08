@@ -104,7 +104,7 @@ spec:
         releaseName: coredns
         values: |
           image:
-            repository: registry.k8s.io/coredns/coredns
+            repository: coredns/coredns
             tag: 1.12.1
             pullPolicy: IfNotPresent
           replicas: 2
