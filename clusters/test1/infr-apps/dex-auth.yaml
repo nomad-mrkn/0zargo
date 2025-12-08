@@ -128,7 +128,15 @@ spec:
               value: "dummy-secret-value"
           healthCheckPath: /
           livenessProbe:
-            disabled: true
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "exit 0"
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
           readinessProbe:
             tcpSocket: {}
             initialDelaySeconds: 30
