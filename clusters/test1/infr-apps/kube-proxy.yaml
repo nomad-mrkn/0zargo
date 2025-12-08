@@ -98,11 +98,11 @@ spec:
                 path: /spec/template/spec/containers/0/env/0/value
                 value: k8s-spb2-backend1-kube-proxy
     # Source 3: Helm chart
-    - repoURL: 'https://artifactory.playteam.ru:443/artifactory/helm/'
-      targetRevision: 1.32.5-52R
-      chart: kube-proxy
+    - repoURL: 'https://github.com/nomad-mrkn/charts.git'
+      targetRevision: HEAD
+      path: kube-proxy
       helm:
-        releaseName: kube-proxy
+        releaseName: k8s-spb2-backend1-kube-proxy
         values: |
           kubeProxy:
             clusterCidr: "10.111.0.0/17"
