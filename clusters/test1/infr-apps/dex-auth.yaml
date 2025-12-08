@@ -126,4 +126,9 @@ spec:
           podEnv:
             - name: KEYCLOACK-SECRET
               value: "dummy-secret-value"
-          healthCheckPath: /healthz
+          healthCheckPath: /
+          readinessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
