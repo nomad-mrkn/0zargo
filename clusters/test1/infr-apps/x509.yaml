@@ -7,46 +7,125 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"
 spec:
   syncPolicy:
-    syncOptions:
-    - FailOnSharedResource=true
     automated:
       prune: true
-      selfHeal: false
-  project: k8s-spb2-backend1
+    syncOptions:
+    - CreateNamespace=true
+    - SkipDryRunOnMissingResource=true
+    - RespectIgnoreDifferences=true
+  project: default
+  ignoreDifferences:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: argocd-manager-x509
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: argocd-manager-x509
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: jit-rbac-marker-k8s-spb2-backend1-x509
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: jit-rbac-marker-k8s-spb2-backend1-x509
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
   destination:
-    name: k8s-spb2-backend1
-    namespace: kube-system
-  source:
-    repoURL: 'https://artifactory.playteam.ru:443/artifactory/helm/'
-    targetRevision: 3.6.0-okko-v2
-    chart: x509-certificate-exporter
-    helm:
-      releaseName: x509-certificate-exporter
-      valuesObject:
-        #values.yaml
-        image:
-          registry: registry.playteam.ru
-          repository: x509/x509-certificate-exporter
-          tag: 3.6.0-722
-        prometheusRules:
-          create: false
-        secretsExporter:
-          resources:
-            limits:
-              cpu: 500m
-              memory: 150Mi
-            requests:
-              cpu: 500m
-              memory: 150Mi
-          tolerations:
-            - key: "node-role.kubernetes.io/infr"
-              operator: "Exists"
-              effect: "NoSchedule"
-          affinity:
-            nodeAffinity:
-              preferredDuringSchedulingIgnoredDuringExecution:
-                - weight: 1
-                  preference:
-                    matchExpressions:
-                    - key: "node-role.kubernetes.io/infr"
-                      operator: "Exists"
+    namespace: x509-certificate-exporter
+    name: kind-test-1
+  sources:
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac-roles
+      directory:
+        include: x509-role.yaml
+    # Source 2: Job wave 99
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac
+      kustomize:
+        commonLabels:
+          jit-rbac/app: k8s-spb2-backend1-x509
+        patches:
+          - target:
+              kind: ServiceAccount
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-x509
+          - target:
+              kind: ClusterRole
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-x509
+          - target:
+              kind: ClusterRoleBinding
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-x509
+              - op: replace
+                path: /roleRef/name
+                value: jit-rbac-marker-k8s-spb2-backend1-x509
+              - op: replace
+                path: /subjects/0/name
+                value: jit-rbac-marker-k8s-spb2-backend1-x509
+              - op: replace
+                path: /subjects/0/namespace
+                value: x509-certificate-exporter
+          - target:
+              kind: Job
+              name: PLACEHOLDER-mark-completed
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: k8s-spb2-backend1-x509-mark-completed
+              - op: replace
+                path: /spec/template/spec/serviceAccountName
+                value: jit-rbac-marker-k8s-spb2-backend1-x509
+              - op: replace
+                path: /spec/template/spec/containers/0/env/0/value
+                value: k8s-spb2-backend1-x509
+    # Source 3: Helm chart
+    - repoURL: 'https://github.com/nomad-mrkn/charts.git'
+      targetRevision: HEAD
+      path: x509-certificate-exporter
+      helm:
+        releaseName: k8s-spb2-backend1-x509
+        values: |
+          image:
+            registry: docker.io
+            repository: enix/x509-certificate-exporter
+            tag: 3.6.0
+          prometheusRules:
+            create: false
+          secretsExporter:
+            resources:
+              limits:
+                cpu: 500m
+                memory: 150Mi
+              requests:
+                cpu: 500m
+                memory: 150Mi
+            tolerations:
+              - key: "node-role.kubernetes.io/infr"
+                operator: "Exists"
+                effect: "NoSchedule"
+            affinity:
+              nodeAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                  - weight: 1
+                    preference:
+                      matchExpressions:
+                      - key: "node-role.kubernetes.io/infr"
+                        operator: "Exists"
