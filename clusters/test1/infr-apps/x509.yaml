@@ -100,32 +100,32 @@ spec:
     - repoURL: 'https://github.com/nomad-mrkn/charts.git'
       targetRevision: HEAD
       path: x509-certificate-exporter
-    helm:
+      helm:
         releaseName: k8s-spb2-backend1-x509
         values: |
-        image:
+          image:
             registry: docker.io
             repository: enix/x509-certificate-exporter
             tag: 3.6.0
-        prometheusRules:
-          create: false
-        secretsExporter:
-          resources:
-            limits:
-              cpu: 500m
-              memory: 150Mi
-            requests:
-              cpu: 500m
-              memory: 150Mi
-          tolerations:
-            - key: "node-role.kubernetes.io/infr"
-              operator: "Exists"
-              effect: "NoSchedule"
-          affinity:
-            nodeAffinity:
-              preferredDuringSchedulingIgnoredDuringExecution:
-                - weight: 1
-                  preference:
-                    matchExpressions:
-                    - key: "node-role.kubernetes.io/infr"
-                      operator: "Exists"
+          prometheusRules:
+            create: false
+          secretsExporter:
+            resources:
+              limits:
+                cpu: 500m
+                memory: 150Mi
+              requests:
+                cpu: 500m
+                memory: 150Mi
+            tolerations:
+              - key: "node-role.kubernetes.io/infr"
+                operator: "Exists"
+                effect: "NoSchedule"
+            affinity:
+              nodeAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                  - weight: 1
+                    preference:
+                      matchExpressions:
+                        - key: "node-role.kubernetes.io/infr"
+                          operator: "Exists"
