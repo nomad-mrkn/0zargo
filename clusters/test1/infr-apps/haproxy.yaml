@@ -114,9 +114,15 @@ spec:
                memory: 64Gi
             daemonset:
               useHostPort: true
+              hostPorts:
+                http: 80
+                https: 443
+                stat: 1024
+                hlzcheck: 1042
             nodeSelector:
               node-role.kubernetes.io/haproxy: ""
             service:
+              enabled: false
               ports:
                 http: 80
                 https: 443
@@ -132,10 +138,6 @@ spec:
                 https: https
                 stat: stat
                 hlzcheck: http
-              tcpPorts:
-                - name: hlzcheck
-                  port: 1042
-                  targetPort: hlzcheck-tcp
             config:
               frontend-config-snippet: |
                 http-request set-var(txn.baggage) req.fhdr(baggage) if { req.fhdr(baggage) -m found }
@@ -159,3 +161,5 @@ spec:
                 http-request set-var(txn.sid) 'var(txn.baggage),param(sid,",")' if { var(txn.baggage) -m sub sid }
                 http-request set-var(txn.wid) 'var(txn.baggage),param(wid,",")' if { var(txn.baggage) -m sub wid }
                 http-request set-var(txn.uid) 'var(txn.baggage),param(uid,",")' if { var(txn.baggage) -m sub uid }
+            serviceMonitor:
+              enabled: false

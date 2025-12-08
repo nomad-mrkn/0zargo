@@ -125,11 +125,4 @@ spec:
             tls: []
           podEnv:
             - name: KEYCLOACK-SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: keycloack-secret
-                  key: secret
-          vault:
-            - name: keycloack-secret
-              path: secret/internal/infrastructure/keycloak/k8s-spb2-backend1
-              type: Opaque
+              value: "dummy-secret-value"

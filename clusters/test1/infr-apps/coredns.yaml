@@ -132,6 +132,7 @@ spec:
                   # Hosts plugin для статических записей (заглушки)
                   hosts {
                       127.0.0.1 elasticsearch-master
+                      127.0.0.1 keda-operator.keda.svc.cluster.local
                       fallthrough
                   }
                   kubernetes cluster.local in-addr.arpa ip6.arpa {
