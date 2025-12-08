@@ -131,7 +131,7 @@ spec:
           #     type: Opaque
           credentials:
             useSecret: true
-            existingSecret: null
+            # existingSecret не указываем, чтобы chart создал секрет автоматически
             secretContents:
               cloud: |
                 [default]
