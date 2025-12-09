@@ -109,6 +109,8 @@ spec:
             tag: 3.6.0
           prometheusRules:
             create: false
+          prometheusServiceMonitor:
+            create: false
           secretsExporter:
             resources:
               limits:
