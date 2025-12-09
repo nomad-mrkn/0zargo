@@ -103,6 +103,10 @@ spec:
       helm:
         releaseName: dex-k8s-authenticator
         values: |
+          image:
+            repository: docker.io/mintel/dex-k8s-authenticator
+            tag: 1.4.0
+            pullPolicy: IfNotPresent
           dexK8sAuthenticator:
             clusters:
             - name: k8s-spb2-backend1
