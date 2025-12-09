@@ -14,9 +14,9 @@ rules:
     resources: ["deployments", "replicasets", "daemonsets"]
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
-  # - apiGroups: [""]
-  #   resources: ["serviceaccounts", "services", "configmaps", "secrets", "pods", "events"]
-  #   verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  - apiGroups: [""]
+    resources: ["serviceaccounts", "services", "configmaps", "secrets", "pods", "events"]
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
   # - apiGroups: ["rbac.authorization.k8s.io"]
   #   resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
