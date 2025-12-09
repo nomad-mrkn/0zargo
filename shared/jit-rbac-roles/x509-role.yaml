@@ -13,46 +13,26 @@ rules:
   - apiGroups: ["apps"]
     resources:
       - deployments
-      - daemonsets
-      - statefulsets
       - replicasets
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
-  # - apiGroups: [""]
-  #   resources:
-  #     - serviceaccounts
-  #     - services
-  #     - configmaps
-  #     - secrets
-  #     - pods
-  #     - pods/log
-  #     - events
-  #     - endpoints
-  #   verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  - apiGroups: [""]
+    resources:
+      - serviceaccounts
+      - services
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
-  # - apiGroups: [""]
-  #   resources: ["namespaces"]
-  #   verbs: ["create", "get", "list", "watch"]
+  - apiGroups: [""]
+    resources:
+      - namespaces
+      - secrets
+    verbs: ["get", "list", "watch"]
 
-  # - apiGroups: [""]
-  #   resources: ["secrets"]
-  #   verbs: ["get", "list", "watch"]
-
-  # - apiGroups: ["rbac.authorization.k8s.io"]
-  #   resources:
-  #     - roles
-  #     - rolebindings
-  #     - clusterroles
-  #     - clusterrolebindings
-  #   verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
-
-  # - apiGroups: ["batch"]
-  #   resources: ["jobs", "cronjobs"]
-  #   verbs: ["create", "delete", "list", "get", "watch", "update", "patch"]
-
-  # - apiGroups: ["monitoring.coreos.com"]
-  #   resources: ["servicemonitors", "podmonitors", "prometheusrules"]
-  #   verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources:
+      - clusterroles
+      - clusterrolebindings
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
