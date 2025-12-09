@@ -89,6 +89,7 @@ rules:
       - configmaps
       - secrets
       - pods
+      - pods/log
       - events
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
