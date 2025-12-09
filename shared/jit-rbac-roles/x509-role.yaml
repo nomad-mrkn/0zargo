@@ -9,14 +9,14 @@ metadata:
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: k8s-spb2-backend1-x509
-# rules:
-#   - apiGroups: ["apps"]
-#     resources:
-#       - deployments
-#       - daemonsets
-#       - statefulsets
-#       - replicasets
-#     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+rules:
+  - apiGroups: ["apps"]
+    resources:
+      - deployments
+      - daemonsets
+      - statefulsets
+      - replicasets
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
 #   - apiGroups: [""]
 #     resources:
