@@ -129,8 +129,7 @@ spec:
                       class error
                   }
                   prometheus :9153
-                  # Hosts plugin для статических записей (заглушки)
-                  hosts {
+                  hosts /etc/hosts {
                       127.0.0.1 elasticsearch-master
                       127.0.0.1 keda-operator.keda.svc.cluster.local
                       127.0.0.1 dex.example.com
