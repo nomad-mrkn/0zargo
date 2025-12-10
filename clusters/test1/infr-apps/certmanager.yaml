@@ -20,15 +20,11 @@ spec:
       name: argocd-manager-certmanager
       jsonPointers:
         - /metadata/labels/jit-rbac~1sync-status
-      jqPathExpressions:
-        - .metadata.annotations."argocd.argoproj.io/hook-delete-policy"
     - group: rbac.authorization.k8s.io
       kind: ClusterRoleBinding
       name: argocd-manager-certmanager
       jsonPointers:
         - /metadata/labels/jit-rbac~1sync-status
-      jqPathExpressions:
-        - .metadata.annotations."argocd.argoproj.io/hook-delete-policy"
     - group: rbac.authorization.k8s.io
       kind: ClusterRole
       name: jit-rbac-marker-k8s-spb2-backend1-certmanager
