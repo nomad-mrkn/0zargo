@@ -23,6 +23,10 @@ rules:
       - services
       - configmaps
       - secrets
+      - pods
+      - endpoints
+      - events
+      - namespaces
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
   - apiGroups: ["rbac.authorization.k8s.io"]
@@ -36,6 +40,18 @@ rules:
   - apiGroups: ["networking.k8s.io"]
     resources:
       - ingressclasses
+      - ingresses
+      - ingresses/status
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+
+  - apiGroups: ["coordination.k8s.io"]
+    resources:
+      - leases
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+
+  - apiGroups: ["discovery.k8s.io"]
+    resources:
+      - endpointslices
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
   - apiGroups: ["policy"]
