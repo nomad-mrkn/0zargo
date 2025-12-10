@@ -123,18 +123,18 @@ spec:
               argocd.argoproj.io/sync-options: ServerSideApply=true
           webhooksCleanup:
             image:
-              registry: docker.io
-              repository: bitnami/kubectl
-              tag: "1.28"
+              registry: cgr.dev
+              repository: chainguard/kubectl
+              tag: "latest"
           features:
             policyExceptions:
               enabled: true
           cleanupJobs:
             admissionReports:
               image:
-                registry: docker.io
-                repository: bitnami/kubectl
-                tag: "1.28"
+              registry: cgr.dev
+              repository: chainguard/kubectl
+              tag: "latest"
               resources:
                 limits:
                   memory: 512Mi
@@ -144,9 +144,9 @@ spec:
                   cpu: 50m
             clusterAdmissionReports:
               image:
-                registry: docker.io
-                repository: bitnami/kubectl
-                tag: "1.28"
+              registry: cgr.dev
+              repository: chainguard/kubectl
+              tag: "latest"
               resources:
                 limits:
                   memory: 512Mi
@@ -156,9 +156,9 @@ spec:
                   cpu: 50m
             updateRequests:
               image:
-                registry: docker.io
-                repository: bitnami/kubectl
-                tag: "1.28"
+              registry: cgr.dev
+              repository: chainguard/kubectl
+              tag: "latest"
               resources:
                 limits:
                   memory: 512Mi
@@ -168,9 +168,9 @@ spec:
                   cpu: 50m
             ephemeralReports:
               image:
-                registry: docker.io
-                repository: bitnami/kubectl
-                tag: "1.28"
+              registry: cgr.dev
+              repository: chainguard/kubectl
+              tag: "latest"
               resources:
                 limits:
                   memory: 512Mi
@@ -180,9 +180,9 @@ spec:
                   cpu: 50m
             clusterEphemeralReports:
               image:
-                registry: docker.io
-                repository: bitnami/kubectl
-                tag: "1.28"
+              registry: cgr.dev
+              repository: chainguard/kubectl
+              tag: "latest"
               resources:
                 limits:
                   memory: 512Mi
