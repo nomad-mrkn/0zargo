@@ -107,11 +107,11 @@ spec:
             kind: DaemonSet
             resources:
              limits:
-               cpu: 64
-               memory: 64Gi
+               cpu: 2
+               memory: 2Gi
              requests:
-               cpu: 64
-               memory: 64Gi
+               cpu: 100m
+               memory: 256Mi
             daemonset:
               useHostPort: true
               hostPorts:
@@ -119,8 +119,6 @@ spec:
                 https: 443
                 stat: 1024
                 hlzcheck: 1042
-            nodeSelector:
-              node-role.kubernetes.io/haproxy: ""
             service:
               enabled: false
               ports:
