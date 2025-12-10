@@ -127,7 +127,7 @@ spec:
                 runAsGroup: 1001
                 seccompProfile:
                   type: RuntimeDefault
-                image: ghcr.io/jaegertracing/jaeger-agent:1.49.0
+                image: jaegertracing/jaeger-agent:1.49.0
               query:
                 resources:
                   requests:
@@ -136,7 +136,7 @@ spec:
                   limits:
                     cpu: 500m
                     memory: 256Mi
-                image: ghcr.io/jaegertracing/jaeger-query:1.49.0
+                image: jaegertracing/jaeger-query:1.49.0
               tolerations:
                 - key: "node-role.kubernetes.io/infr"
                   operator: "Exists"
@@ -151,7 +151,7 @@ spec:
                             operator: "Exists"
               collector:
                 replicas: 1
-                image: ghcr.io/jaegertracing/jaeger-collector:1.49.0
+                image: jaegertracing/jaeger-collector:1.49.0
                 options:
                   collector:
                     num-workers: 10
