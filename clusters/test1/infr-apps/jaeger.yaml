@@ -186,6 +186,11 @@ spec:
                 dependencies:
                   enabled: false
                 secretName: jaeger-secret
+          webhooks:
+            mutatingWebhook:
+              create: false
+            validatingWebhook:
+              create: false
           rbac:
             create: true
             pspEnabled: false
