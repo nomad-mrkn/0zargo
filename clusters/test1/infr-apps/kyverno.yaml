@@ -277,6 +277,13 @@ spec:
               registry: ghcr.io
               repository: kyverno/reports-controller
               tag: v1.12.5
+          policyReportsCleanup:
+            enabled: false
+            image:
+              registry: cgr.dev
+              repository: chainguard/kubectl
+              tag: "latest"
+              pullPolicy: IfNotPresent
           tolerations: []
           nodeSelector: {}
           affinity: {}
