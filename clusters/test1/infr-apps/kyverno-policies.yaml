@@ -5,196 +5,161 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "3"
-    argocd.argoproj.io/sync-options: Skip=true
 spec:
   syncPolicy:
     automated:
-      prune: false
+      prune: true
     syncOptions:
     - CreateNamespace=true
     - SkipDryRunOnMissingResource=true
     - RespectIgnoreDifferences=true
   project: default
+  ignoreDifferences:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: argocd-manager-kyverno-policies
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: argocd-manager-kyverno-policies
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: jit-rbac-marker-k8s-spb2-backend1-kyverno-policies
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: jit-rbac-marker-k8s-spb2-backend1-kyverno-policies
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: batch
+      kind: Job
   destination:
     name: kind-test-1
     namespace: kyverno
-  source:
-    repoURL: 'https://github.com/nomad-mrkn/charts.git'
-    targetRevision: HEAD
-    path: kyverno-policies
-    helm:
-      releaseName: kyverno-policies
-      values: |
-        denyRoleAggregation:
-          validationFailureAction: Audit
-        denyBuiltInUsers:
-          validationFailureAction: Enforce
-        impersonate:
-          validationFailureAction: Audit
-        runAsNonRoot:
-          validationFailureAction: Audit
-          exclude:
-            any:
-              - resources:
-                  namespaces:
-                    - kube-system
-                    - jenkins-devops
-                    - profiler
-                    - kyverno
-                    - falco
-                    - linkerd
-                    - linkerd-viz
-              - resources:
-                  namespaces:
-                    - trivy-operator
-                  selector:
-                    matchLabels:
-                      app: node-collector
-        runAsNonRootGroup:
-          validationFailureAction: Audit
-          exclude:
-            any:
-              - resources:
-                  namespaces:
-                    - kube-system
-                    - jenkins-devops
-                    - profiler
-                    - kyverno
-                    - falco
-                    - linkerd
-                    - linkerd-viz
-              - resources:
-                  namespaces:
-                    - trivy-operator
-                  selector:
-                    matchLabels:
-                      app: node-collector
-        disallowPrivileged:
-          validationFailureAction: Enforce
-          exclude:
-            any:
-              - resources:
-                  namespaces:
-                    - kube-system
-                    - jenkins-devops
-                    - profiler
-                    - linkerd
-                    - linkerd-viz
-                    - falco
-              - resources:
-                  namespaces:
-                    - trivy-operator
-                  selector:
-                    matchLabels:
-                      app: node-collector
-        rootFsReadyOnly:
-          validationFailureAction: Audit
-          exclude:
-            any:
-              - resources:
-                  namespaces:
-                    - kube-system
-                    - jenkins-devops
-                    - profiler
-                    - linkerd
-                    - linkerd-viz
-                    - falco
-        requestsLimits:
-          validationFailureAction: Audit
-          exclude:
-            any:
-              - resources:
-                  namespaces:
-                    - kube-system
-                    - jenkins-devops
-                    - profiler
-                    - linkerd
-                    - linkerd-viz
-                    - trivy-operator
-        requestsEqLimits:
-          validationFailureAction: Audit
-          exclude:
-            any:
-              - resources:
-                  namespaces:
-                    - kube-system
-                    - jenkins-devops
-                    - profiler
-                    - linkerd
-                    - linkerd-viz
-                    - trivy-operator
-        verifyImages:
-          validationFailureAction: Audit
-          podSecuritySeverity: medium
-          images: []
-        verifyImagesExceptions:
-          - name: "kyverno"
-            namespace: kyverno
-            exceptionNames:
-              - kyverno*
-          - name: "kube-system"
-            namespace: kube-system
-            exceptionNames:
-              - vmagent*
-              - victoriametrics*
-              - vault*
-              - metrics*
-              - kube-scheduler*
-              - kube-proxy*
-              - kube-controller*
-              - kube-apiserver*
-              - keda-operator*
-              - jaeger-operator*
-              - haproxy-ingress*
-              - fluent-bit*
-              - dex-k8s*
-              - coredns*
-              - cert-manager*
-              - calico*
-              - prometheus*
-              - x509-certificate-exporter*
-              - velero*
-              - policy-reporter*
-              - neo4j-exporter*
-              - kubelet-serving-cert-approver*
-              - context-postgres-connector*
-          - name: "kubelet-serving-cert-approver"
-            namespace: kubelet-serving-cert-approver
-            exceptionNames:
-              - kubelet-serving-cert-approver*
-        restrictLinkerdIdentityIssuer:
-          validationFailureAction: Audit
-        mutateNsPolicy:
-          - name: "linkerd-privileged"
-            labels:
-              pod-security.kubernetes.io/enforce: privileged
-              pod-security.kubernetes.io/audit: privileged
-              pod-security.kubernetes.io/warn: baseline
+  sources:
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac-roles
+      directory:
+        include: kyverno-policies-role.yaml
+    # Source 2: Job wave 99
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac
+      kustomize:
+        commonLabels:
+          jit-rbac/app: k8s-spb2-backend1-kyverno-policies
+        patches:
+          - target:
+              kind: ServiceAccount
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-kyverno-policies
+          - target:
+              kind: ClusterRole
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-kyverno-policies
+          - target:
+              kind: ClusterRoleBinding
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-kyverno-policies
+              - op: replace
+                path: /roleRef/name
+                value: jit-rbac-marker-k8s-spb2-backend1-kyverno-policies
+              - op: replace
+                path: /subjects/0/name
+                value: jit-rbac-marker-k8s-spb2-backend1-kyverno-policies
+              - op: replace
+                path: /subjects/0/namespace
+                value: kyverno
+          - target:
+              kind: Job
+              name: PLACEHOLDER-mark-completed
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: k8s-spb2-backend1-kyverno-policies-mark-completed
+              - op: replace
+                path: /spec/template/spec/serviceAccountName
+                value: jit-rbac-marker-k8s-spb2-backend1-kyverno-policies
+              - op: replace
+                path: /spec/template/spec/containers/0/env/0/value
+                value: k8s-spb2-backend1-kyverno-policies
+    # Source 3: Helm chart
+    - repoURL: 'https://github.com/nomad-mrkn/charts.git'
+      targetRevision: HEAD
+      path: kyverno-policies
+      helm:
+        releaseName: kyverno-policies
+        values: |
+          denyRoleAggregation:
+            validationFailureAction: Audit
+          denyBuiltInUsers:
+            validationFailureAction: Enforce
+          impersonate:
+            validationFailureAction: Audit
+          runAsNonRoot:
+            validationFailureAction: Audit
             exclude:
               any:
                 - resources:
                     namespaces:
                       - kube-system
                       - jenkins-devops
+                      - profiler
                       - kyverno
-                      - default
-                      - kube-public
-                      - kube-node-lease
                       - falco
-        customPodSecurity:
-          - name: "baseline-linkerd"
-            level: baseline
-            version: latest
+                      - linkerd
+                      - linkerd-viz
+                - resources:
+                    namespaces:
+                      - trivy-operator
+                    selector:
+                      matchLabels:
+                        app: node-collector
+          runAsNonRootGroup:
+            validationFailureAction: Audit
             exclude:
               any:
                 - resources:
                     namespaces:
                       - kube-system
                       - jenkins-devops
+                      - profiler
                       - kyverno
-                      - default
-                      - kube-public
-                      - kube-node-lease
+                      - falco
+                      - linkerd
+                      - linkerd-viz
+                - resources:
+                    namespaces:
+                      - trivy-operator
+                    selector:
+                      matchLabels:
+                        app: node-collector
+          disallowPrivileged:
+            validationFailureAction: Enforce
+            exclude:
+              any:
+                - resources:
+                    namespaces:
+                      - kube-system
+                      - jenkins-devops
+                      - profiler
+                      - linkerd
+                      - linkerd-viz
                       - falco
                 - resources:
                     namespaces:
@@ -202,29 +167,144 @@ spec:
                     selector:
                       matchLabels:
                         app: node-collector
-            securityExclusions:
-              - controlName: Capabilities
-                images:
-                  - "*/linkerd/proxy-init*"
-        restrictLinkerdPodAnnotation:
-          validationFailureAction: Audit
-          exclude:
-            any:
-              - resources:
-                  namespaces:
-                    - kube-system
-                    - jenkins-devops
-                    - kyverno
-                    - default
-                    - kube-public
-                    - kube-node-lease
-                    - falco
-                    - rekko-service
-                    - split-service
-                    - split-web
-                    - linkerd
-                    - linkerd-viz
-                    - verdicts
-                    - log-analyzer
-                    - trivy-operator
-                    - trivy-proxy
+          rootFsReadyOnly:
+            validationFailureAction: Audit
+            exclude:
+              any:
+                - resources:
+                    namespaces:
+                      - kube-system
+                      - jenkins-devops
+                      - profiler
+                      - linkerd
+                      - linkerd-viz
+                      - falco
+          requestsLimits:
+            validationFailureAction: Audit
+            exclude:
+              any:
+                - resources:
+                    namespaces:
+                      - kube-system
+                      - jenkins-devops
+                      - profiler
+                      - linkerd
+                      - linkerd-viz
+                      - trivy-operator
+          requestsEqLimits:
+            validationFailureAction: Audit
+            exclude:
+              any:
+                - resources:
+                    namespaces:
+                      - kube-system
+                      - jenkins-devops
+                      - profiler
+                      - linkerd
+                      - linkerd-viz
+                      - trivy-operator
+          verifyImages:
+            validationFailureAction: Audit
+            podSecuritySeverity: medium
+            images: []
+          verifyImagesExceptions:
+            - name: "kyverno"
+              namespace: kyverno
+              exceptionNames:
+                - kyverno*
+            - name: "kube-system"
+              namespace: kube-system
+              exceptionNames:
+                - vmagent*
+                - victoriametrics*
+                - vault*
+                - metrics*
+                - kube-scheduler*
+                - kube-proxy*
+                - kube-controller*
+                - kube-apiserver*
+                - keda-operator*
+                - jaeger-operator*
+                - haproxy-ingress*
+                - fluent-bit*
+                - dex-k8s*
+                - coredns*
+                - cert-manager*
+                - calico*
+                - prometheus*
+                - x509-certificate-exporter*
+                - velero*
+                - policy-reporter*
+                - neo4j-exporter*
+                - kubelet-serving-cert-approver*
+                - context-postgres-connector*
+            - name: "kubelet-serving-cert-approver"
+              namespace: kubelet-serving-cert-approver
+              exceptionNames:
+                - kubelet-serving-cert-approver*
+          restrictLinkerdIdentityIssuer:
+            validationFailureAction: Audit
+          mutateNsPolicy:
+            - name: "linkerd-privileged"
+              labels:
+                pod-security.kubernetes.io/enforce: privileged
+                pod-security.kubernetes.io/audit: privileged
+                pod-security.kubernetes.io/warn: baseline
+              exclude:
+                any:
+                  - resources:
+                      namespaces:
+                        - kube-system
+                        - jenkins-devops
+                        - kyverno
+                        - default
+                        - kube-public
+                        - kube-node-lease
+                        - falco
+          customPodSecurity:
+            - name: "baseline-linkerd"
+              level: baseline
+              version: latest
+              exclude:
+                any:
+                  - resources:
+                      namespaces:
+                        - kube-system
+                        - jenkins-devops
+                        - kyverno
+                        - default
+                        - kube-public
+                        - kube-node-lease
+                        - falco
+                  - resources:
+                      namespaces:
+                        - trivy-operator
+                    selector:
+                      matchLabels:
+                        app: node-collector
+              securityExclusions:
+                - controlName: Capabilities
+                  images:
+                    - "*/linkerd/proxy-init*"
+          restrictLinkerdPodAnnotation:
+            validationFailureAction: Audit
+            exclude:
+              any:
+                - resources:
+                    namespaces:
+                      - kube-system
+                      - jenkins-devops
+                      - kyverno
+                      - default
+                      - kube-public
+                      - kube-node-lease
+                      - falco
+                      - rekko-service
+                      - split-service
+                      - split-web
+                      - linkerd
+                      - linkerd-viz
+                      - verdicts
+                      - log-analyzer
+                      - trivy-operator
+                      - trivy-proxy
