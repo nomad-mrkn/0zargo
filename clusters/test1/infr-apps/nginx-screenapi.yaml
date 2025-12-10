@@ -108,8 +108,6 @@ spec:
       path: ingress-nginx
       helm:
         releaseName: screenapi-ingress-nginx
-        valueFiles:
-          - $values/RU/SPB/ru_SPB/prod/k8s/k8s-spb2-backend1/screenapi-ingress/values.yaml
-    - repoURL: 'https://bitbucket.playteam.ru/scm/devops/configs.git'
-      targetRevision: master
-      ref: values
+        values: |
+          # Values are managed via valueFiles in production
+          # For test environment, add test-specific overrides here if needed
