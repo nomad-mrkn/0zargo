@@ -18,39 +18,39 @@ rules:
       - replicasets
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
-  - apiGroups: [""]
-    resources:
-      - serviceaccounts
-      - services
-      - configmaps
-      - secrets
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  # - apiGroups: [""]
+  #   resources:
+  #     - serviceaccounts
+  #     - services
+  #     - configmaps
+  #     - secrets
+  #   verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources:
-      - clusterroles
-      - clusterrolebindings
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  # - apiGroups: ["rbac.authorization.k8s.io"]
+  #   resources:
+  #     - clusterroles
+  #     - clusterrolebindings
+  #   verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
-  - apiGroups: ["operator.victoriametrics.com"]
-    resources:
-      - vmpodscrapes
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  # - apiGroups: ["operator.victoriametrics.com"]
+  #   resources:
+  #     - vmpodscrapes
+  #   verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
-  - apiGroups: ["networking.k8s.io"]
-    resources:
-      - ingresses
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  # - apiGroups: ["networking.k8s.io"]
+  #   resources:
+  #     - ingresses
+  #   verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
-  - apiGroups: ["policy"]
-    resources:
-      - poddisruptionbudgets
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  # - apiGroups: ["policy"]
+  #   resources:
+  #     - poddisruptionbudgets
+  #   verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
-  - apiGroups: ["autoscaling"]
-    resources:
-      - horizontalpodautoscalers
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  # - apiGroups: ["autoscaling"]
+  #   resources:
+  #     - horizontalpodautoscalers
+  #   verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
