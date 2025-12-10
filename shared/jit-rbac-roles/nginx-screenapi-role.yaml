@@ -29,14 +29,6 @@ rules:
       - namespaces
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources:
-      - clusterroles
-      - clusterrolebindings
-      - roles
-      - rolebindings
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
-
   - apiGroups: ["networking.k8s.io"]
     resources:
       - ingressclasses

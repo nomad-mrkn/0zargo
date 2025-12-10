@@ -23,14 +23,6 @@ rules:
       - secrets
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources:
-      - clusterroles
-      - clusterrolebindings
-      - roles
-      - rolebindings
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
-
   - apiGroups: ["coordination.k8s.io"]
     resources:
       - leases

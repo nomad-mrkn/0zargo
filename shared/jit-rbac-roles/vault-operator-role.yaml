@@ -29,14 +29,6 @@ rules:
       - leases
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources:
-      - clusterroles
-      - clusterrolebindings
-      - roles
-      - rolebindings
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
-
   - apiGroups: ["apiextensions.k8s.io"]
     resources:
       - customresourcedefinitions

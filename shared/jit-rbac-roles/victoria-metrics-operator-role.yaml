@@ -65,14 +65,6 @@ rules:
     resources: ["leases"]
     verbs: ["create", "get", "update"]
   
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources:
-      - roles
-      - rolebindings
-      - clusterroles
-      - clusterrolebindings
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
-  
   - apiGroups: ["monitoring.coreos.com"]
     resources:
       - servicemonitors

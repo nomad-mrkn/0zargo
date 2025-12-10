@@ -26,12 +26,6 @@ rules:
       - secrets
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources:
-      - clusterroles
-      - clusterrolebindings
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
-  
   - apiGroups: ["operator.victoriametrics.com"]
     resources:
       - vmpodscrapes
