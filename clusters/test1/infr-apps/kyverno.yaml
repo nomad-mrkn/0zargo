@@ -123,9 +123,9 @@ spec:
               argocd.argoproj.io/sync-options: ServerSideApply=true
           webhooksCleanup:
             image:
-              registry: cgr.dev
-              repository: chainguard/kubectl
-              tag: "latest"
+              registry: docker.io
+              repository: alpine/k8s
+              tag: "1.28.0"
               pullPolicy: IfNotPresent
           features:
             policyExceptions:
@@ -134,8 +134,8 @@ spec:
             admissionReports:
               image:
                 registry: cgr.dev
-                repository: chainguard/kubectl
-                tag: "latest"
+                repository: alpine/k8s
+                tag: "1.28.0"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -147,8 +147,8 @@ spec:
             clusterAdmissionReports:
               image:
                 registry: cgr.dev
-                repository: chainguard/kubectl
-                tag: "latest"
+                repository: alpine/k8s
+                tag: "1.28.0"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -160,8 +160,8 @@ spec:
             updateRequests:
               image:
                 registry: cgr.dev
-                repository: chainguard/kubectl
-                tag: "latest"
+                repository: alpine/k8s
+                tag: "1.28.0"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -173,8 +173,8 @@ spec:
             ephemeralReports:
               image:
                 registry: cgr.dev
-                repository: chainguard/kubectl
-                tag: "latest"
+                repository: alpine/k8s
+                tag: "1.28.0"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -186,8 +186,8 @@ spec:
             clusterEphemeralReports:
               image:
                 registry: cgr.dev
-                repository: chainguard/kubectl
-                tag: "latest"
+                repository: alpine/k8s
+                tag: "1.28.0"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -280,9 +280,9 @@ spec:
           policyReportsCleanup:
             enabled: true
             image:
-              registry: cgr.dev
-              repository: chainguard/kubectl
-              tag: "latest"
+              registry: docker.io
+              repository: alpine/k8s
+              tag: "1.28.0"
               pullPolicy: IfNotPresent
           tolerations: []
           nodeSelector: {}
