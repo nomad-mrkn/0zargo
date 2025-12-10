@@ -124,8 +124,8 @@ spec:
           webhooksCleanup:
             image:
               registry: docker.io
-              repository: bitnami/kubectl
-              tag: "1.28"
+              repository: alpine/k8s
+              tag: "1.28.5"
               pullPolicy: IfNotPresent
           features:
             policyExceptions:
@@ -134,8 +134,8 @@ spec:
             admissionReports:
               image:
                 registry: docker.io
-                repository: bitnami/kubectl
-                tag: "1.28"
+                repository: alpine/k8s
+                tag: "1.28.5"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -147,8 +147,8 @@ spec:
             clusterAdmissionReports:
               image:
                 registry: docker.io
-                repository: bitnami/kubectl
-                tag: "1.28"
+                repository: alpine/k8s
+                tag: "1.28.5"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -160,8 +160,8 @@ spec:
             updateRequests:
               image:
                 registry: docker.io
-                repository: bitnami/kubectl
-                tag: "1.28"
+                repository: alpine/k8s
+                tag: "1.28.5"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -173,8 +173,8 @@ spec:
             ephemeralReports:
               image:
                 registry: docker.io
-                repository: bitnami/kubectl
-                tag: "1.28"
+                repository: alpine/k8s
+                tag: "1.28.5"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -186,8 +186,8 @@ spec:
             clusterEphemeralReports:
               image:
                 registry: docker.io
-                repository: bitnami/kubectl
-                tag: "1.28"
+                repository: alpine/k8s
+                tag: "1.28.5"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
