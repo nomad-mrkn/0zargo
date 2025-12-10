@@ -53,6 +53,8 @@ rules:
       - secrets
       - endpoints
       - events
+      - pods
+      - pods/log
     verbs: ["create", "update", "patch", "get", "list", "delete"]
   
   - apiGroups: [""]
