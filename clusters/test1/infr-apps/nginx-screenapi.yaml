@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-spb2-backend1-screenapi-nginx
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  ignoreDifferences:
+  - group: apps
+    kind: Deployment
+    jsonPointers:
+    - /spec/replicas
+  - group: batch
+    kind: Job
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+    - RespectIgnoreDifferences=true
+    - FailOnSharedResource=false
+  project: k8s-spb2-backend1
+  destination:
+    name: k8s-spb2-backend1
+    namespace: kube-system
+  sources:
+    - repoURL: 'https://artifactory.playteam.ru:443/artifactory/helm/'
+      targetRevision: 4.12.1
+      chart: ingress-nginx
+      helm:
+        releaseName: screenapi-ingress-nginx
+        valueFiles:
+          - $values/RU/SPB/ru_SPB/prod/k8s/k8s-spb2-backend1/screenapi-ingress/values.yaml
+    - repoURL: 'https://bitbucket.playteam.ru/scm/devops/configs.git'
+      targetRevision: master
+      ref: values
