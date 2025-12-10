@@ -278,7 +278,7 @@ spec:
               repository: kyverno/reports-controller
               tag: v1.12.5
           policyReportsCleanup:
-            enabled: false
+            enabled: true
             image:
               registry: cgr.dev
               repository: chainguard/kubectl
