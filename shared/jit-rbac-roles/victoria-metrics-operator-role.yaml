@@ -52,11 +52,16 @@ rules:
       - configmaps
       - secrets
       - endpoints
+      - events
     verbs: ["create", "update", "patch", "get", "list", "delete"]
   
   - apiGroups: [""]
     resources: ["configmaps/status"]
     verbs: ["get", "update", "patch"]
+  
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["create", "get", "update"]
   
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources:
