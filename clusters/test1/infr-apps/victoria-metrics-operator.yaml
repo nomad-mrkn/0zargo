@@ -119,7 +119,7 @@ spec:
           metrics-server:
             enabled: true
             rbac:
-              create: false
+              create: true
             args:
               - --kubelet-insecure-tls
           prometheus-node-exporter:
