@@ -133,7 +133,7 @@ spec:
           cleanupJobs:
             admissionReports:
               image:
-                registry: cgr.dev
+                registry: docker.io
                 repository: alpine/k8s
                 tag: "1.28.0"
                 pullPolicy: IfNotPresent
@@ -146,7 +146,7 @@ spec:
                   cpu: 50m
             clusterAdmissionReports:
               image:
-                registry: cgr.dev
+                registry: docker.io
                 repository: alpine/k8s
                 tag: "1.28.0"
                 pullPolicy: IfNotPresent
@@ -159,7 +159,7 @@ spec:
                   cpu: 50m
             updateRequests:
               image:
-                registry: cgr.dev
+                registry: docker.io
                 repository: alpine/k8s
                 tag: "1.28.0"
                 pullPolicy: IfNotPresent
@@ -172,7 +172,7 @@ spec:
                   cpu: 50m
             ephemeralReports:
               image:
-                registry: cgr.dev
+                registry: docker.io
                 repository: alpine/k8s
                 tag: "1.28.0"
                 pullPolicy: IfNotPresent
@@ -185,7 +185,7 @@ spec:
                   cpu: 50m
             clusterEphemeralReports:
               image:
-                registry: cgr.dev
+                registry: docker.io
                 repository: alpine/k8s
                 tag: "1.28.0"
                 pullPolicy: IfNotPresent
