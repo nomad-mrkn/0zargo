@@ -126,15 +126,17 @@ spec:
               registry: cgr.dev
               repository: chainguard/kubectl
               tag: "latest"
+              pullPolicy: IfNotPresent
           features:
             policyExceptions:
               enabled: true
           cleanupJobs:
             admissionReports:
               image:
-              registry: cgr.dev
-              repository: chainguard/kubectl
-              tag: "latest"
+                registry: cgr.dev
+                repository: chainguard/kubectl
+                tag: "latest"
+                pullPolicy: IfNotPresent
               resources:
                 limits:
                   memory: 512Mi
@@ -144,9 +146,10 @@ spec:
                   cpu: 50m
             clusterAdmissionReports:
               image:
-              registry: cgr.dev
-              repository: chainguard/kubectl
-              tag: "latest"
+                registry: cgr.dev
+                repository: chainguard/kubectl
+                tag: "latest"
+                pullPolicy: IfNotPresent
               resources:
                 limits:
                   memory: 512Mi
@@ -156,9 +159,10 @@ spec:
                   cpu: 50m
             updateRequests:
               image:
-              registry: cgr.dev
-              repository: chainguard/kubectl
-              tag: "latest"
+                registry: cgr.dev
+                repository: chainguard/kubectl
+                tag: "latest"
+                pullPolicy: IfNotPresent
               resources:
                 limits:
                   memory: 512Mi
@@ -168,9 +172,10 @@ spec:
                   cpu: 50m
             ephemeralReports:
               image:
-              registry: cgr.dev
-              repository: chainguard/kubectl
-              tag: "latest"
+                registry: cgr.dev
+                repository: chainguard/kubectl
+                tag: "latest"
+                pullPolicy: IfNotPresent
               resources:
                 limits:
                   memory: 512Mi
@@ -180,9 +185,10 @@ spec:
                   cpu: 50m
             clusterEphemeralReports:
               image:
-              registry: cgr.dev
-              repository: chainguard/kubectl
-              tag: "latest"
+                registry: cgr.dev
+                repository: chainguard/kubectl
+                tag: "latest"
+                pullPolicy: IfNotPresent
               resources:
                 limits:
                   memory: 512Mi
