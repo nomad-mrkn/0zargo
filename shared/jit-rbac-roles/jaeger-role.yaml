@@ -10,6 +10,10 @@ metadata:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: k8s-spb2-backend1-jaeger
 rules:
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  
   - apiGroups: ["apps"]
     resources: ["deployments", "replicasets"]
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
