@@ -28,6 +28,11 @@ rules:
       - replicasets
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
+  - apiGroups: ["apps"]
+    resources:
+      - deployments/scale
+    verbs: ["get", "list", "watch", "patch", "update"]
+  
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources:
       - clusterroles
