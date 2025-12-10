@@ -203,45 +203,10 @@ spec:
                       - linkerd
                       - linkerd-viz
                       - trivy-operator
-          verifyImages:
-            validationFailureAction: Audit
-            podSecuritySeverity: medium
-            images: []
-          verifyImagesExceptions:
-            - name: "kyverno"
-              namespace: kyverno
-              exceptionNames:
-                - kyverno*
-            - name: "kube-system"
-              namespace: kube-system
-              exceptionNames:
-                - vmagent*
-                - victoriametrics*
-                - vault*
-                - metrics*
-                - kube-scheduler*
-                - kube-proxy*
-                - kube-controller*
-                - kube-apiserver*
-                - keda-operator*
-                - jaeger-operator*
-                - haproxy-ingress*
-                - fluent-bit*
-                - dex-k8s*
-                - coredns*
-                - cert-manager*
-                - calico*
-                - prometheus*
-                - x509-certificate-exporter*
-                - velero*
-                - policy-reporter*
-                - neo4j-exporter*
-                - kubelet-serving-cert-approver*
-                - context-postgres-connector*
-            - name: "kubelet-serving-cert-approver"
-              namespace: kubelet-serving-cert-approver
-              exceptionNames:
-                - kubelet-serving-cert-approver*
+          # verifyImages disabled for test environment (requires at least one image reference)
+          verifyImages: null
+          # verifyImagesExceptions also disabled since verifyImages is disabled
+          verifyImagesExceptions: null
           restrictLinkerdIdentityIssuer:
             validationFailureAction: Audit
           mutateNsPolicy:
