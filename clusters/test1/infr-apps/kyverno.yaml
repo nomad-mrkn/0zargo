@@ -123,9 +123,9 @@ spec:
               argocd.argoproj.io/sync-options: ServerSideApply=true
           webhooksCleanup:
             image:
-              registry: docker.io
-              repository: alpine/k8s
-              tag: "1.28.3"
+              registry: registry.k8s.io
+              repository: kubectl
+              tag: "v1.28.0"
               pullPolicy: IfNotPresent
           features:
             policyExceptions:
@@ -133,9 +133,9 @@ spec:
           cleanupJobs:
             admissionReports:
               image:
-                registry: docker.io
-                repository: alpine/k8s
-                tag: "1.28.3"
+                registry: registry.k8s.io
+                repository: kubectl
+                tag: "v1.28.0"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -146,9 +146,9 @@ spec:
                   cpu: 50m
             clusterAdmissionReports:
               image:
-                registry: docker.io
-                repository: alpine/k8s
-                tag: "1.28.3"
+                registry: registry.k8s.io
+                repository: kubectl
+                tag: "v1.28.0"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -159,9 +159,9 @@ spec:
                   cpu: 50m
             updateRequests:
               image:
-                registry: docker.io
-                repository: alpine/k8s
-                tag: "1.28.3"
+                registry: registry.k8s.io
+                repository: kubectl
+                tag: "v1.28.0"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -172,9 +172,9 @@ spec:
                   cpu: 50m
             ephemeralReports:
               image:
-                registry: docker.io
-                repository: alpine/k8s
-                tag: "1.28.3"
+                registry: registry.k8s.io
+                repository: kubectl
+                tag: "v1.28.0"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -185,9 +185,9 @@ spec:
                   cpu: 50m
             clusterEphemeralReports:
               image:
-                registry: docker.io
-                repository: alpine/k8s
-                tag: "1.28.3"
+                registry: registry.k8s.io
+                repository: kubectl
+                tag: "v1.28.0"
                 pullPolicy: IfNotPresent
               resources:
                 limits:
@@ -280,9 +280,9 @@ spec:
           policyReportsCleanup:
             enabled: true
             image:
-              registry: docker.io
-              repository: alpine/k8s
-              tag: "1.28.0"
+              registry: registry.k8s.io
+              repository: kubectl
+              tag: "v1.28.0"
               pullPolicy: IfNotPresent
           tolerations: []
           nodeSelector: {}
