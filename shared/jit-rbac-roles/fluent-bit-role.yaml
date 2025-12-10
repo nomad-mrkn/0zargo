@@ -4,7 +4,6 @@ metadata:
   name: argocd-manager-fluent-bit
   annotations:
     argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
@@ -68,7 +67,6 @@ metadata:
   name: argocd-manager-fluent-bit
   annotations:
     argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
