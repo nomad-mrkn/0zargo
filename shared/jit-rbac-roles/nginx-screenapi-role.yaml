@@ -4,8 +4,9 @@ metadata:
   name: argocd-manager-nginx-screenapi
   annotations:
     argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+    argocd.argoproj.io/hook-delete-policy: HookFailed
     argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-options: Prune=false
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: k8s-spb2-backend1-screenapi-nginx
@@ -95,8 +96,8 @@ metadata:
   name: argocd-manager-nginx-screenapi
   annotations:
     argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-options: Prune=false
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: k8s-spb2-backend1-screenapi-nginx

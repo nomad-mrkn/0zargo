@@ -246,6 +246,7 @@ spec:
                         - kube-node-lease
                         - falco
                         - fluent-bit
+                        - vector
                   - resources:
                       namespaces:
                         - trivy-operator
