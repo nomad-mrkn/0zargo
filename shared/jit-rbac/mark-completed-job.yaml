@@ -25,7 +25,7 @@ metadata:
 rules:
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources: ["clusterroles", "clusterrolebindings"]
-    verbs: ["get", "list", "patch", "bind", "escalate"]
+    verbs: ["get", "list", "patch", "update", "bind", "escalate"]
   - apiGroups: [""]
     resources: ["serviceaccounts"]
     verbs: ["get", "list", "patch"]
