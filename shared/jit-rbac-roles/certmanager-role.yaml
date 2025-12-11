@@ -3,6 +3,8 @@ kind: ClusterRole
 metadata:
   name: argocd-manager-certmanager
   annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
@@ -99,6 +101,12 @@ rules:
     resources: ["serviceaccounts/token"]
     verbs: ["create"]
   
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources:
+      - roles
+      - rolebindings
+    verbs: ["get", "list", "create", "update", "patch"]
+  
   - apiGroups: ["authorization.k8s.io"]
     resources: ["subjectaccessreviews"]
     verbs: ["create"]
@@ -116,6 +124,8 @@ kind: ClusterRoleBinding
 metadata:
   name: argocd-manager-certmanager
   annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac

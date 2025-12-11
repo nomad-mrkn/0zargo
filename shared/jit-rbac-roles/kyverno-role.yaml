@@ -3,6 +3,8 @@ kind: ClusterRole
 metadata:
   name: argocd-manager-kyverno
   annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
@@ -30,6 +32,14 @@ rules:
     resources:
       - deployments/scale
     verbs: ["get", "list", "watch", "patch", "update"]
+  
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources:
+      - clusterroles
+      - clusterrolebindings
+      - roles
+      - rolebindings
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
   - apiGroups: ["coordination.k8s.io"]
     resources:
@@ -99,6 +109,8 @@ kind: ClusterRoleBinding
 metadata:
   name: argocd-manager-kyverno
   annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac

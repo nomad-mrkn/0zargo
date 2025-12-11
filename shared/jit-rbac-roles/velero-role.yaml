@@ -3,6 +3,8 @@ kind: ClusterRole
 metadata:
   name: argocd-manager-velero
   annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
@@ -25,6 +27,14 @@ rules:
       - services
       - configmaps
       - secrets
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources:
+      - clusterroles
+      - clusterrolebindings
+      - roles
+      - rolebindings
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
 
   - apiGroups: ["batch"]
@@ -67,6 +77,8 @@ kind: ClusterRoleBinding
 metadata:
   name: argocd-manager-velero
   annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac

@@ -3,6 +3,8 @@ kind: ClusterRole
 metadata:
   name: argocd-manager-jaeger
   annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
@@ -18,6 +20,10 @@ rules:
   
   - apiGroups: [""]
     resources: ["serviceaccounts", "services"]
+    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+  
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles", "clusterrolebindings"]
     verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
   
   - apiGroups: ["admissionregistration.k8s.io"]
@@ -42,6 +48,8 @@ kind: ClusterRoleBinding
 metadata:
   name: argocd-manager-jaeger
   annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
     argocd.argoproj.io/sync-wave: "-1"
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
