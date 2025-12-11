@@ -104,4 +104,22 @@ spec:
         releaseName: k8s-spb2-backend1-fluent-bit
         values: |
           kind: DaemonSet
+          config:
+            outputs: |
+              [OUTPUT]
+                  Name es
+                  Match kube.*
+                  Host elasticsearch-master.elasticsearch.svc.cluster.local
+                  Port 9200
+                  Logstash_Format On
+                  Retry_Limit False
+              
+              [OUTPUT]
+                  Name es
+                  Match host.*
+                  Host elasticsearch-master.elasticsearch.svc.cluster.local
+                  Port 9200
+                  Logstash_Format On
+                  Logstash_Prefix node
+                  Retry_Limit False
           
