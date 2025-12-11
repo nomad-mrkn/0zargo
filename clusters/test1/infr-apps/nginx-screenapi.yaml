@@ -1,0 +1,113 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-spb2-backend1-screenapi-nginx
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+    - CreateNamespace=true
+    - SkipDryRunOnMissingResource=true
+    - RespectIgnoreDifferences=true
+  project: default
+  ignoreDifferences:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: argocd-manager-nginx-screenapi
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: argocd-manager-nginx-screenapi
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: jit-rbac-marker-k8s-spb2-backend1-screenapi-nginx
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: jit-rbac-marker-k8s-spb2-backend1-screenapi-nginx
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
+    - group: batch
+      kind: Job
+  destination:
+    name: kind-test-1
+    namespace: kube-system
+  sources:
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac-roles
+      directory:
+        include: nginx-screenapi-role.yaml
+    # Source 2: Job wave 99
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac
+      kustomize:
+        commonLabels:
+          jit-rbac/app: k8s-spb2-backend1-screenapi-nginx
+        patches:
+          - target:
+              kind: ServiceAccount
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-screenapi-nginx
+          - target:
+              kind: ClusterRole
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-screenapi-nginx
+          - target:
+              kind: ClusterRoleBinding
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-screenapi-nginx
+              - op: replace
+                path: /roleRef/name
+                value: jit-rbac-marker-k8s-spb2-backend1-screenapi-nginx
+              - op: replace
+                path: /subjects/0/name
+                value: jit-rbac-marker-k8s-spb2-backend1-screenapi-nginx
+              - op: replace
+                path: /subjects/0/namespace
+                value: kube-system
+          - target:
+              kind: Job
+              name: PLACEHOLDER-mark-completed
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: k8s-spb2-backend1-screenapi-nginx-mark-completed
+              - op: replace
+                path: /spec/template/spec/serviceAccountName
+                value: jit-rbac-marker-k8s-spb2-backend1-screenapi-nginx
+              - op: replace
+                path: /spec/template/spec/containers/0/env/0/value
+                value: k8s-spb2-backend1-screenapi-nginx
+    # Source 3: Helm chart
+    - repoURL: 'https://github.com/nomad-mrkn/charts.git'
+      targetRevision: HEAD
+      path: ingress-nginx
+      helm:
+        releaseName: screenapi-ingress-nginx
+        values: |
+          # Values are managed via valueFiles in production
+          # For test environment, add test-specific overrides here if needed

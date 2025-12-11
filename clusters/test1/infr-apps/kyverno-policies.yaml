@@ -145,6 +145,7 @@ spec:
                       - linkerd
                       - linkerd-viz
                       - fluent-bit
+                      - keda
                 - resources:
                     namespaces:
                       - trivy-operator
