@@ -1,0 +1,108 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-spb2-backend1-certmanager
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+    - CreateNamespace=true
+    - SkipDryRunOnMissingResource=true
+    - RespectIgnoreDifferences=true
+  project: default
+  ignoreDifferences:
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: argocd-manager-certmanager
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: argocd-manager-certmanager
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: jit-rbac-marker-k8s-spb2-backend1-certmanager
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+    - group: rbac.authorization.k8s.io
+      kind: ClusterRoleBinding
+      name: jit-rbac-marker-k8s-spb2-backend1-certmanager
+      jsonPointers:
+        - /metadata/labels/jit-rbac~1sync-status
+  destination:
+    name: kind-test-1
+    namespace: cert-manager
+  sources:
+    # Source 1: JIT RBAC (ClusterRole + ClusterRoleBinding)
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac-roles
+      directory:
+        include: certmanager-role.yaml
+    # Source 2: Job wave 99
+    - repoURL: 'https://github.com/nomad-mrkn/0zargo.git'
+      targetRevision: HEAD
+      path: shared/jit-rbac
+      kustomize:
+        commonLabels:
+          jit-rbac/app: k8s-spb2-backend1-certmanager
+        patches:
+          - target:
+              kind: ServiceAccount
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+          - target:
+              kind: ClusterRole
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+          - target:
+              kind: ClusterRoleBinding
+              name: jit-rbac-marker-PLACEHOLDER
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+              - op: replace
+                path: /roleRef/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+              - op: replace
+                path: /subjects/0/name
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+              - op: replace
+                path: /subjects/0/namespace
+                value: cert-manager
+          - target:
+              kind: Job
+              name: PLACEHOLDER-mark-completed
+            patch: |-
+              - op: replace
+                path: /metadata/name
+                value: k8s-spb2-backend1-certmanager-mark-completed
+              - op: replace
+                path: /spec/template/spec/serviceAccountName
+                value: jit-rbac-marker-k8s-spb2-backend1-certmanager
+              - op: replace
+                path: /spec/template/spec/containers/0/env/0/value
+                value: k8s-spb2-backend1-certmanager
+    # Source 3: Helm chart
+    - repoURL: 'https://github.com/nomad-mrkn/charts.git'
+      targetRevision: HEAD
+      path: cert-manager
+      helm:
+        releaseName: k8s-spb2-backend1-certmanager
+        values: |
+          installCRDs: true
+          startupapicheck:
+           enabled: false
