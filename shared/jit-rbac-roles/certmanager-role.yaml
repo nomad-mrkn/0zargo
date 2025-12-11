@@ -5,6 +5,7 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-options: Prune=false
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: k8s-spb2-backend1-certmanager
@@ -125,6 +126,7 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-options: Prune=false
   labels:
     app.kubernetes.io/part-of: argo-jit-rbac
     jit-rbac/app: k8s-spb2-backend1-certmanager
