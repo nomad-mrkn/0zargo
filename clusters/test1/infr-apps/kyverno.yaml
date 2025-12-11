@@ -20,11 +20,13 @@ spec:
       name: argocd-manager-kyverno
       jsonPointers:
         - /metadata/labels/jit-rbac~1sync-status
+        - /metadata/annotations
     - group: rbac.authorization.k8s.io
       kind: ClusterRoleBinding
       name: argocd-manager-kyverno
       jsonPointers:
         - /metadata/labels/jit-rbac~1sync-status
+        - /metadata/annotations
     - group: rbac.authorization.k8s.io
       kind: ClusterRole
       name: jit-rbac-marker-k8s-spb2-backend1-kyverno
