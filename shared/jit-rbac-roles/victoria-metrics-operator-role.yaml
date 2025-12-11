@@ -12,30 +12,30 @@ metadata:
 rules:
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: ["operator.victoriametrics.com"]
     resources:
       - vmagents
       - vmnodescrapes
       - vmservicescrapes
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: ["admissionregistration.k8s.io"]
     resources:
       - validatingwebhookconfigurations
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: ["apiregistration.k8s.io"]
     resources:
       - apiservices
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: ["cert-manager.io"]
     resources:
       - certificates
       - issuers
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: ["apps"]
     resources:
@@ -43,7 +43,7 @@ rules:
       - replicasets
       - statefulsets
       - daemonsets
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: [""]
     resources:
@@ -55,7 +55,7 @@ rules:
       - events
       - pods
       - pods/log
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: [""]
     resources: ["configmaps/status"]
@@ -65,37 +65,36 @@ rules:
     resources: ["leases"]
     verbs: ["create", "get", "update"]
   
+  # RBAC rights for ArgoCD kubectl auth reconcile (namespace-scoped only)
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources:
       - roles
       - rolebindings
-      - clusterroles
-      - clusterrolebindings
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["get", "list", "create", "update", "patch"]
   
   - apiGroups: ["monitoring.coreos.com"]
     resources:
       - servicemonitors
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: ["autoscaling"]
     resources:
       - horizontalpodautoscalers
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: ["autoscaling.k8s.io"]
     resources:
       - verticalpodautoscalers
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: ["policy"]
     resources:
       - poddisruptionbudgets
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
   
   - apiGroups: ["batch"]
     resources: ["jobs"]
-    verbs: ["create", "update", "patch", "get", "list", "delete"]
+    verbs: ["create", "update", "patch", "get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

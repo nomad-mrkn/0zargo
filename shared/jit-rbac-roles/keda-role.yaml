@@ -12,39 +12,40 @@ metadata:
 rules:
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
   
   - apiGroups: ["apiregistration.k8s.io"]
     resources: ["apiservices"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
   
   - apiGroups: ["apps"]
     resources: ["deployments", "replicasets"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
   
   - apiGroups: [""]
     resources: ["serviceaccounts", "services", "configmaps", "secrets"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
   
+  # RBAC rights for ArgoCD kubectl auth reconcile (namespace-scoped only)
   - apiGroups: ["rbac.authorization.k8s.io"]
-    resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    resources: ["roles", "rolebindings"]
+    verbs: ["get", "list", "create", "update", "patch"]
   
   - apiGroups: ["policy"]
     resources: ["poddisruptionbudgets"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
   
   - apiGroups: ["admissionregistration.k8s.io"]
     resources: ["validatingwebhookconfigurations"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
   
   - apiGroups: ["cert-manager.io"]
     resources: ["issuers", "certificates"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
   
   - apiGroups: ["monitoring.coreos.com"]
     resources: ["servicemonitors", "prometheusrules", "podmonitors"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

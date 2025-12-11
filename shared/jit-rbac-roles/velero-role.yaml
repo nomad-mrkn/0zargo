@@ -12,14 +12,14 @@ metadata:
 rules:
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: ["apps"]
     resources:
       - deployments
       - daemonsets
       - replicasets
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: [""]
     resources:
@@ -27,21 +27,20 @@ rules:
       - services
       - configmaps
       - secrets
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 
+  # RBAC rights for ArgoCD kubectl auth reconcile (namespace-scoped only)
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources:
-      - clusterroles
-      - clusterrolebindings
       - roles
       - rolebindings
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["get", "list", "create", "update", "patch"]
 
   - apiGroups: ["batch"]
     resources:
       - jobs
       - cronjobs
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: ["velero.io"]
     resources:
@@ -55,18 +54,18 @@ rules:
       - podvolumebackups
       - podvolumerestores
       - serverstatusrequests
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: ["monitoring.coreos.com"]
     resources:
       - servicemonitors
       - prometheusrules
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: ["operator.victoriametrics.com"]
     resources:
       - vmservicescrapes
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: ["*"]
     resources: ["*"]

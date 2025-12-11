@@ -14,13 +14,13 @@ rules:
     resources:
       - deployments
       - replicasets
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: [""]
     resources:
       - serviceaccounts
       - services
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+    verbs: ["create", "update", "patch", "get", "list", "watch"]
 
   - apiGroups: [""]
     resources:
@@ -28,11 +28,12 @@ rules:
       - secrets
     verbs: ["get", "list", "watch"]
 
+  # RBAC rights for ArgoCD kubectl auth reconcile (namespace-scoped only)
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources:
-      - clusterroles
-      - clusterrolebindings
-    verbs: ["create", "update", "patch", "get", "list", "watch", "delete"]
+      - roles
+      - rolebindings
+    verbs: ["get", "list", "create", "update", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
