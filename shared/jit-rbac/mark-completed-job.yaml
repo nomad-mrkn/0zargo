@@ -4,6 +4,8 @@ kind: ServiceAccount
 metadata:
   name: jit-rbac-marker-PLACEHOLDER
   annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookFailed
     argocd.argoproj.io/sync-wave: "98"
     argocd.argoproj.io/sync-options: Prune=false
   labels:
@@ -33,6 +35,8 @@ kind: ClusterRoleBinding
 metadata:
   name: jit-rbac-marker-PLACEHOLDER
   annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookFailed
     argocd.argoproj.io/sync-wave: "98"
     argocd.argoproj.io/sync-options: Prune=false
   labels:
